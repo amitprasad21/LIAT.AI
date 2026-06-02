@@ -18,6 +18,20 @@ export const RetailExperience: React.FC = () => {
     return <FiTrendingUp size={22} />;
   };
 
+  const getBrandBgImage = (brand: { id: string; tier: string }) => {
+    if (brand.tier === 'luxury') {
+      const jewelryIds = ['cartier', 'rolex', 'tiffany', 'bulgari', 'vancleef'];
+      if (jewelryIds.includes(brand.id)) {
+        return '/images/luxury_jewelry.png';
+      }
+      return '/images/fashion_avenue_luxury.png';
+    }
+    if (brand.tier === 'premium') {
+      return '/images/premium_showroom.png';
+    }
+    return '/images/leasing_showroom.png';
+  };
+
   return (
     <section id="retail" className="py-24 bg-background border-b border-gold/10">
       <div className="container mx-auto px-6">
@@ -51,9 +65,15 @@ export const RetailExperience: React.FC = () => {
                     boxShadow: 'inset 3px 3px 6px rgba(163, 177, 198, 0.25), inset -3px -3px 6px rgba(255, 255, 255, 0.7)'
                   }}
                 >
+                  {/* Category Background Image */}
+                  <div
+                    className="absolute inset-0 bg-cover bg-center opacity-[0.06] group-hover:opacity-[0.12] transition-opacity duration-500 pointer-events-none"
+                    style={{ backgroundImage: `url(${getBrandBgImage(brand)})` }}
+                  />
+
                   {/* Brand Color Ambient Glow */}
                   <div
-                    className="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity duration-500"
+                    className="absolute inset-0 opacity-10 group-hover:opacity-15 transition-opacity duration-500"
                     style={{ backgroundColor: brand.logoColor }}
                   />
 
@@ -63,7 +83,7 @@ export const RetailExperience: React.FC = () => {
                   </span>
 
                   {/* Dynamic Hover Spec Reveal */}
-                  <div className="absolute inset-0 bg-surface/95 flex flex-col justify-center p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]">
+                  <div className="absolute inset-0 bg-surface/90 backdrop-blur-md flex flex-col justify-center p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]">
                     <span className="text-[10px] uppercase tracking-wider text-gold font-bold mb-1">
                       {brand.category}
                     </span>
@@ -102,8 +122,15 @@ export const RetailExperience: React.FC = () => {
                     boxShadow: 'inset 3px 3px 6px rgba(163, 177, 198, 0.25), inset -3px -3px 6px rgba(255, 255, 255, 0.7)'
                   }}
                 >
+                  {/* Category Background Image */}
                   <div
-                    className="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity duration-500"
+                    className="absolute inset-0 bg-cover bg-center opacity-[0.06] group-hover:opacity-[0.12] transition-opacity duration-500 pointer-events-none"
+                    style={{ backgroundImage: `url(${getBrandBgImage(brand)})` }}
+                  />
+
+                  {/* Brand Color Ambient Glow */}
+                  <div
+                    className="absolute inset-0 opacity-10 group-hover:opacity-15 transition-opacity duration-500"
                     style={{ backgroundColor: brand.logoColor }}
                   />
 
@@ -111,7 +138,8 @@ export const RetailExperience: React.FC = () => {
                     {brand.name}
                   </span>
 
-                  <div className="absolute inset-0 bg-surface/95 flex flex-col justify-center p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]">
+                  {/* Dynamic Hover Spec Reveal */}
+                  <div className="absolute inset-0 bg-surface/90 backdrop-blur-md flex flex-col justify-center p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]">
                     <span className="text-[10px] uppercase tracking-wider text-gold font-bold mb-1">
                       {brand.category}
                     </span>
@@ -144,6 +172,13 @@ export const RetailExperience: React.FC = () => {
                   key={brand.id}
                   className="rounded bg-surface border border-gold/15 p-8 flex flex-col justify-between h-48 relative overflow-hidden group transition-all duration-500 hover:border-gold/40 hover:-translate-y-1"
                 >
+                  {/* Category Background Image */}
+                  <div
+                    className="absolute inset-0 bg-cover bg-center opacity-[0.05] group-hover:opacity-[0.1] transition-opacity duration-500 pointer-events-none"
+                    style={{ backgroundImage: `url(/images/leasing_showroom.png)` }}
+                  />
+
+                  {/* Brand Color Ambient Glow */}
                   <div
                     className="absolute inset-0 opacity-5 group-hover:opacity-10 transition-opacity duration-500"
                     style={{ backgroundColor: brand.logoColor }}
