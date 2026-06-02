@@ -1,11 +1,12 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { SectionHeader } from '@/components/shared/SectionHeader';
 import { ScrollReveal } from '@/components/animations/ScrollReveal';
 import { luxuryDistrictData } from '@/data/luxuryBrands';
 
 export const LuxuryDistrict: React.FC = () => {
+  const [activeTab, setActiveTab] = useState(0);
   const { pullQuote, luxuryStats, highlights } = luxuryDistrictData;
 
   return (
@@ -71,18 +72,41 @@ export const LuxuryDistrict: React.FC = () => {
             </ScrollReveal>
           </div>
 
-          {/* Middle Column: AI-generated High Fashion Avenue Showcase */}
+          {/* Middle Column: Interactive AI Luxury Showcase Gallery */}
           <div className="lg:col-span-4 flex flex-col">
-            <ScrollReveal className="rounded-lg overflow-hidden border border-gold/15 bg-surface h-full flex flex-col min-h-[280px]">
+            <ScrollReveal className="rounded-lg overflow-hidden border border-gold/15 bg-surface h-full flex flex-col min-h-[280px] relative group">
               <div className="relative flex-1 h-full min-h-[280px] w-full">
                 <img
-                  src="/images/fashion_avenue_luxury.png"
-                  alt="Fashion Avenue Luxury Corridor"
-                  className="absolute inset-0 w-full h-full object-cover opacity-90 hover:scale-[1.03] transition-transform duration-700 ease-out"
+                  src={activeTab === 0 ? '/images/fashion_avenue_luxury.png' : '/images/luxury_watch_salon.png'}
+                  alt={activeTab === 0 ? 'Fashion Avenue Luxury Corridor' : 'Haute Horology Watch Salon'}
+                  className="absolute inset-0 w-full h-full object-cover opacity-90 hover:scale-[1.03] transition-all duration-700 ease-out"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
-                <span className="absolute bottom-4 left-4 text-[9px] uppercase tracking-[0.25em] text-white/85 font-sans font-bold">
-                  AI-Imagined Couture Corridor
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+                
+                {/* Floating Glassmorphic Tabs */}
+                <div className="absolute top-4 left-4 right-4 flex gap-2 p-1 rounded bg-black/45 backdrop-blur-md border border-white/10 z-20">
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab(0)}
+                    className={`flex-1 py-1 rounded text-[8px] uppercase tracking-wider font-bold transition-all duration-300 ${
+                      activeTab === 0 ? 'bg-gold text-background' : 'text-slate-300 hover:text-white'
+                    }`}
+                  >
+                    Couture Corridor
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab(1)}
+                    className={`flex-1 py-1 rounded text-[8px] uppercase tracking-wider font-bold transition-all duration-300 ${
+                      activeTab === 1 ? 'bg-gold text-background' : 'text-slate-300 hover:text-white'
+                    }`}
+                  >
+                    Watch Salon
+                  </button>
+                </div>
+
+                <span className="absolute bottom-4 left-4 text-[9px] uppercase tracking-[0.25em] text-white/85 font-sans font-bold z-20">
+                  {activeTab === 0 ? 'AI-Imagined Couture Corridor' : 'AI-Imagined Watch Salon'}
                 </span>
               </div>
             </ScrollReveal>

@@ -234,8 +234,31 @@ export const WhyDubaiMall: React.FC = () => {
           </div>
         </div>
 
-        {/* Cinematic Video First Spotlight Card */}
+        {/* AI-Imagined Future expansion banner */}
         <ScrollReveal className="mt-24 max-w-4xl mx-auto">
+          <div className="rounded-2xl overflow-hidden border border-gold/15 bg-surface h-72 relative group shadow-sm">
+            <img
+              src="/images/mall_future_expansion.png"
+              alt="AI-Imagined Mall Future Expansion"
+              className="absolute inset-0 w-full h-full object-cover opacity-90 hover:scale-[1.02] transition-transform duration-1000 ease-out"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-950/50 to-transparent pointer-events-none z-10" />
+            <div className="absolute inset-y-0 left-0 flex flex-col justify-center p-8 md:p-12 z-20 max-w-lg text-white">
+              <span className="text-[9px] uppercase tracking-[0.3em] text-gold-light font-bold mb-2">
+                VISIONARY EXPANSION PREVIEW
+              </span>
+              <h3 className="font-display text-2xl md:text-3xl font-semibold mb-3">
+                Dubai Mall 2030 Spatial Design
+              </h3>
+              <p className="text-xs text-slate-300 leading-relaxed font-sans font-light">
+                An AI-generated conceptual design of the upcoming smart expansion corridor, featuring dynamic double-curved facades and integrated green promenades.
+              </p>
+            </div>
+          </div>
+        </ScrollReveal>
+
+        {/* Cinematic Video First Spotlight Card */}
+        <ScrollReveal className="mt-16 max-w-4xl mx-auto">
           <div 
             className="rounded-2xl p-6 md:p-8 bg-surface border border-white/60 neu-outset transition-all duration-500 hover:shadow-[0_15px_45px_rgba(43,89,195,0.08)] group"
           >

@@ -10,7 +10,7 @@ import { FiUsers, FiCheckCircle, FiChevronRight, FiX, FiSend } from 'react-icons
 
 const VENUE_IMAGES: Record<string, string> = {
   'grand-atrium': 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=600&q=80',
-  'fashion-catwalk': 'https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=600&q=80',
+  'fashion-catwalk': '/images/runway_event_setup.png', // AI-Imagined Catwalk Setup
   'fountain-plaza': 'https://images.unsplash.com/photo-1534008897995-27a23e859048?auto=format&fit=crop&w=600&q=80',
   'ice-rink-event': 'https://images.unsplash.com/photo-1518063319789-7217e6706b04?auto=format&fit=crop&w=600&q=80',
   'old-town-island': 'https://images.unsplash.com/photo-1582672060674-bc2bd808a8b5?auto=format&fit=crop&w=600&q=80'
@@ -244,6 +244,29 @@ export const EventsPlatform: React.FC = () => {
             </ScrollReveal>
           ))}
         </div>
+
+        {/* AI-Imagined Runway Setup Showcase */}
+        <ScrollReveal className="mb-16 max-w-4xl mx-auto">
+          <div className="rounded-2xl overflow-hidden border border-gold/15 bg-surface h-72 relative group shadow-sm">
+            <img
+              src="/images/runway_event_setup.png"
+              alt="AI-Imagined Runway Event Setup"
+              className="absolute inset-0 w-full h-full object-cover opacity-90 hover:scale-[1.02] transition-transform duration-1000 ease-out"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-950/50 to-transparent pointer-events-none z-10" />
+            <div className="absolute inset-y-0 left-0 flex flex-col justify-center p-8 md:p-12 z-20 max-w-lg text-white">
+              <span className="text-[9px] uppercase tracking-[0.3em] text-gold-light font-bold mb-2">
+                AI DESIGN PLATFORM
+              </span>
+              <h3 className="font-display text-2xl md:text-3xl font-semibold mb-3">
+                Immersive Catwalk Setup
+              </h3>
+              <p className="text-xs text-slate-300 leading-relaxed font-sans font-light">
+                An AI-generated vision of a bespoke runway event setup in the Grand Atrium, showcasing high-density projection structures and custom guest configurations.
+              </p>
+            </div>
+          </div>
+        </ScrollReveal>
 
         {/* Bottom CTA Block */}
         <ScrollReveal className="text-center" delay={0.2}>

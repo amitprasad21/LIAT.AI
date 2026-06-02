@@ -18,7 +18,7 @@ const SUITE_IMAGES: Record<string, string> = {
 
 const ACTIVATION_IMAGES: Record<string, string> = {
   'Pop-Up Zone': '/images/premium_showroom.png', // AI Showroom
-  'Digital OOH': 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80', // Digital screen/billboard
+  'Digital OOH': '/images/holographic_ooh_ads.png', // AI Holographic Ads
   'Social Integration': 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=600&q=80', // Social/smartphone
   'In-Store Showcase': '/images/luxury_jewelry.png', // AI Luxury Jewelry
   'Event Partnerships': 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=600&q=80', // Event Partnerships
@@ -222,6 +222,29 @@ export const SponsorshipPlatform: React.FC = () => {
             * Custom tailored sponsorship packages are available for global and seasonal multi-channel brand campaigns.
           </p>
         </div>
+
+        {/* AI-Imagined Holographic OOH Campaign Banner */}
+        <ScrollReveal className="mb-16 max-w-3xl mx-auto">
+          <div className="rounded-2xl overflow-hidden border border-gold/15 bg-surface h-60 relative group shadow-sm">
+            <img
+              src="/images/holographic_ooh_ads.png"
+              alt="AI Holographic OOH Display"
+              className="absolute inset-0 w-full h-full object-cover opacity-90 hover:scale-[1.02] transition-transform duration-1000 ease-out"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-950/50 to-transparent pointer-events-none z-10" />
+            <div className="absolute inset-y-0 left-0 flex flex-col justify-center p-8 z-20 max-w-md text-white">
+              <span className="text-[9px] uppercase tracking-[0.3em] text-gold-light font-bold mb-2">
+                AI ADVANCED MEDIA
+              </span>
+              <h3 className="font-display text-xl md:text-2xl font-semibold mb-2">
+                Holographic OOH Activations
+              </h3>
+              <p className="text-xs text-slate-300 leading-relaxed font-sans font-light">
+                Secure next-generation 3D holographic displays in main pedestrian nodes to achieve high-attention brand dominance.
+              </p>
+            </div>
+          </div>
+        </ScrollReveal>
 
         {/* Inline Booking Request Form */}
         <ScrollReveal id="sponsorship-inquiry-form" className="max-w-3xl mx-auto rounded-lg bg-surface border border-gold/15 p-8 md:p-12">

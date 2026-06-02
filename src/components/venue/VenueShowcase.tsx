@@ -166,6 +166,29 @@ export const VenueShowcase: React.FC = () => {
           ))}
         </div>
 
+        {/* AI-Imagined Waterfront Venue Banner */}
+        <ScrollReveal className="mt-16">
+          <div className="rounded-2xl overflow-hidden border border-gold/15 bg-surface h-72 relative group shadow-sm">
+            <img
+              src="/images/waterfront_venue_setup.png"
+              alt="AI Waterfront Venue Setup"
+              className="absolute inset-0 w-full h-full object-cover opacity-90 hover:scale-[1.02] transition-transform duration-1000 ease-out"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/50 to-transparent pointer-events-none z-10" />
+            <div className="absolute inset-y-0 left-0 flex flex-col justify-center p-8 md:p-12 z-20 max-w-lg text-white">
+              <span className="text-[9px] uppercase tracking-[0.3em] text-gold-light font-bold mb-2">
+                AI SPATIAL PLANNING
+              </span>
+              <h3 className="font-display text-2xl md:text-3xl font-semibold mb-3">
+                Waterfront Bridge Plaza Render
+              </h3>
+              <p className="text-xs text-slate-300 leading-relaxed font-sans font-light">
+                An AI-generated conceptual rendering showing the Waterfront Bridge Plaza configured for a prestigious evening reception, featuring synchronized fountain and lighting sequences.
+              </p>
+            </div>
+          </div>
+        </ScrollReveal>
+
       </div>
     </section>
   );

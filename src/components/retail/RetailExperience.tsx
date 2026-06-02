@@ -54,8 +54,10 @@ export const RetailExperience: React.FC = () => {
     return <FiTrendingUp size={22} />;
   };
 
-  const getBrandBgImage = (brand: { id: string }) => {
-    return BRAND_IMAGES[brand.id] || '/images/leasing_showroom.png';
+  const getBrandBgImage = (brand: { id: string; tier: string }) => {
+    if (BRAND_IMAGES[brand.id]) return BRAND_IMAGES[brand.id];
+    if (brand.tier === 'premium') return '/images/tech_flagship_store.png';
+    return '/images/leasing_showroom.png';
   };
 
   return (

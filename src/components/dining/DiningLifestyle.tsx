@@ -31,6 +31,7 @@ const DINING_IMAGES: Record<string, string> = {
 
 export const DiningLifestyle: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState<'all' | 'fine-dining' | 'casual' | 'cafe'>('all');
+  const [activeDiningTab, setActiveDiningTab] = useState(0);
 
   const filteredOptions = activeFilter === 'all'
     ? diningOptions
@@ -153,18 +154,41 @@ export const DiningLifestyle: React.FC = () => {
             ))}
           </div>
 
-          {/* Right 1/3: AI-generated Waterfront Dining Showcase */}
+          {/* Right 1/3: Interactive AI Culinary Showcase Gallery */}
           <div className="lg:col-span-4">
-            <ScrollReveal delay={0.15} className="rounded-lg overflow-hidden border border-gold/15 bg-surface h-full flex flex-col min-h-[260px]">
+            <ScrollReveal delay={0.15} className="rounded-lg overflow-hidden border border-gold/15 bg-surface h-full flex flex-col min-h-[260px] relative group">
               <div className="relative flex-1 h-full min-h-[260px] w-full">
                 <img
-                  src="/images/waterfront_dining.png"
-                  alt="Waterfront Dining at Night"
-                  className="absolute inset-0 w-full h-full object-cover opacity-90 hover:scale-[1.03] transition-transform duration-700 ease-out"
+                  src={activeDiningTab === 0 ? '/images/waterfront_dining.png' : '/images/rooftop_terrace_view.png'}
+                  alt={activeDiningTab === 0 ? 'Waterfront Dining at Night' : 'Rooftop Culinary Lounge'}
+                  className="absolute inset-0 w-full h-full object-cover opacity-90 hover:scale-[1.03] transition-all duration-700 ease-out"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
-                <span className="absolute bottom-4 left-4 text-[9px] uppercase tracking-[0.25em] text-white/85 font-sans font-bold">
-                  AI-Imagined Waterfront Vista
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+                
+                {/* Floating Glassmorphic Tabs */}
+                <div className="absolute top-4 left-4 right-4 flex gap-2 p-1 rounded bg-black/45 backdrop-blur-md border border-white/10 z-20">
+                  <button
+                    type="button"
+                    onClick={() => setActiveDiningTab(0)}
+                    className={`flex-1 py-1 rounded text-[8px] uppercase tracking-wider font-bold transition-all duration-300 ${
+                      activeDiningTab === 0 ? 'bg-gold text-background' : 'text-slate-300 hover:text-white'
+                    }`}
+                  >
+                    Waterfront Vista
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setActiveDiningTab(1)}
+                    className={`flex-1 py-1 rounded text-[8px] uppercase tracking-wider font-bold transition-all duration-300 ${
+                      activeDiningTab === 1 ? 'bg-gold text-background' : 'text-slate-300 hover:text-white'
+                    }`}
+                  >
+                    Rooftop Lounge
+                  </button>
+                </div>
+
+                <span className="absolute bottom-4 left-4 text-[9px] uppercase tracking-[0.25em] text-white/85 font-sans font-bold z-20">
+                  {activeDiningTab === 0 ? 'AI-Imagined Waterfront Vista' : 'AI-Imagined Rooftop Lounge'}
                 </span>
               </div>
             </ScrollReveal>
