@@ -46,7 +46,7 @@ export const LuxuryDistrict: React.FC = () => {
                 </h4>
                 
                 <p className="text-sm text-text-secondary leading-relaxed font-sans font-light mb-8">
-                  Serving as the premier global home for flagship representations of the world\'s leading fashion syndicates. The high concentration of retail stores creates unparalleled brand gravity and customer conversions.
+                  Serving as the premier global home for flagship representations of the world's leading fashion syndicates. The high concentration of retail stores creates unparalleled brand gravity and customer conversions.
                 </p>
               </div>
 
