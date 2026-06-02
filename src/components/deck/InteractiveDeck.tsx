@@ -288,8 +288,8 @@ export const InteractiveDeck: React.FC = () => {
       {/* 🔴 Virtual Laser Pointer Overlay */}
       {isPresenterMode && (
         <div 
-          className="fixed pointer-events-none w-5 h-5 rounded-full bg-red-600/90 shadow-[0_0_15px_#ef4444,0_0_30px_#ef4444] z-[9999] -translate-x-1/2 -translate-y-1/2 transition-all duration-75 ease-out"
-          style={{ left: mousePos.x, top: mousePos.y }}
+          className="fixed pointer-events-none w-5 h-5 rounded-full bg-red-600/90 shadow-[0_0_15px_#ef4444,0_0_30px_#ef4444] z-[9999] top-0 left-0"
+          style={{ transform: `translate3d(${mousePos.x}px, ${mousePos.y}px, 0) translate(-50%, -50%)` }}
         />
       )}
 
