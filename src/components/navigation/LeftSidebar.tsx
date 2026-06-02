@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { useScrollProgress } from '@/hooks/useScrollProgress';
 import {
@@ -41,7 +40,8 @@ export const LeftSidebar: React.FC = () => {
   useEffect(() => {
     const handleHashChange = () => {
       // Default to overview if on home route with no hash
-      const hash = window.location.hash.replace('#', '') || 'overview';
+      const hashParts = window.location.hash.split('#').filter(Boolean);
+      const hash = hashParts[hashParts.length - 1] || 'overview';
       setActiveHash(hash);
     };
 
@@ -60,8 +60,8 @@ export const LeftSidebar: React.FC = () => {
         aria-label="Sidebar Navigation"
       >
         {/* Scroll Progress Meter around Logo */}
-        <Link
-          href="/#overview"
+        <a
+          href="#overview"
           className="relative w-11 h-11 rounded-full flex items-center justify-center bg-surface border border-slate-200/80 mb-12 cursor-pointer focus-ring group hover:scale-[1.03] transition-all duration-300"
           title="Dubai Mall Home"
         >
@@ -88,7 +88,7 @@ export const LeftSidebar: React.FC = () => {
             />
           </svg>
           <span className="font-display text-[9px] font-bold text-gold tracking-tight">DM</span>
-        </Link>
+        </a>
 
         {/* Links Navigation Group */}
         <div className="flex-1 flex flex-col gap-5 justify-center w-full px-3">
@@ -97,9 +97,9 @@ export const LeftSidebar: React.FC = () => {
             const Icon = link.icon;
 
             return (
-              <Link
+              <a
                 key={link.href}
-                href={link.href}
+                href={`#${link.hash}`}
                 className={cn(
                   'relative group w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-250 focus-ring',
                   isActive
@@ -119,7 +119,7 @@ export const LeftSidebar: React.FC = () => {
                 <span className="absolute left-16 px-3 py-1.5 rounded-lg bg-surface border border-slate-200/80 text-[10px] uppercase tracking-widest text-gold opacity-0 group-hover:opacity-100 pointer-events-none transition-all duration-250 shadow-md">
                   {link.label}
                 </span>
-              </Link>
+              </a>
             );
           })}
         </div>
@@ -140,9 +140,9 @@ export const LeftSidebar: React.FC = () => {
           const Icon = link.icon;
 
           return (
-            <Link
+            <a
               key={link.href}
-              href={link.href}
+              href={`#${link.hash}`}
               onClick={() => setMenuOpen(false)}
               className={cn(
                 'w-11 h-11 rounded-lg flex items-center justify-center transition-all duration-350 focus-ring',
@@ -152,7 +152,7 @@ export const LeftSidebar: React.FC = () => {
               )}
             >
               <Icon size={17} />
-            </Link>
+            </a>
           );
         })}
         {/* Toggleable mobile full menu trigger */}
@@ -179,20 +179,20 @@ export const LeftSidebar: React.FC = () => {
         )}
       >
         <div className="flex flex-col space-y-4 text-center max-h-[80vh] overflow-y-auto w-full px-12">
-          <Link
-            href="/#overview"
+          <a
+            href="#overview"
             onClick={() => setMenuOpen(false)}
             className="text-[10px] uppercase tracking-[0.35em] text-gold font-bold block mb-4 hover:text-gold-light transition-colors duration-300 focus-ring cursor-pointer"
           >
             DUBAI MALL SALES DECK
-          </Link>
+          </a>
           {SIDEBAR_LINKS.map((link, idx) => {
             const isActive = activeHash === link.hash;
             const Icon = link.icon;
             return (
-              <Link
+              <a
                 key={link.href}
-                href={link.href}
+                href={`#${link.hash}`}
                 onClick={() => setMenuOpen(false)}
                 style={{ transitionDelay: menuOpen ? `${idx * 40}ms` : '0ms' }}
                 className={cn(
@@ -205,7 +205,7 @@ export const LeftSidebar: React.FC = () => {
               >
                 <Icon size={18} />
                 <span>{link.label}</span>
-              </Link>
+              </a>
             );
           })}
         </div>

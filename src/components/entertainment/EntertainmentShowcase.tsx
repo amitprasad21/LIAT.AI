@@ -132,7 +132,7 @@ export const EntertainmentShowcase: React.FC = () => {
                   </div>
 
                   {/* High Impact Stat Box */}
-                  <div className="mb-6 p-4 rounded bg-[#E4EBF5] neu-inset border border-white/60 text-center sm:text-left">
+                  <div className="mb-6 p-4 rounded neu-inset text-center sm:text-left">
                     <span className="block text-[9px] uppercase tracking-wider text-text-secondary mb-1">
                       Key Performance Indicator
                     </span>
@@ -223,17 +223,17 @@ export const EntertainmentShowcase: React.FC = () => {
             </div>
 
             {/* Quick Actions Row */}
-            <div className="flex gap-4 justify-center mt-6">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mt-6">
               <button
                 onClick={() => setIsInlinePlaying(!isInlinePlaying)}
-                className="px-5 py-2 rounded-lg text-xs uppercase tracking-wider font-bold border border-white/60 bg-surface text-gold hover:text-gold-light transition-all duration-300 shadow-sm neu-outset flex items-center gap-1.5 focus-ring"
+                className="px-5 py-2.5 rounded-lg text-xs uppercase tracking-wider font-bold border border-white/60 bg-surface text-gold hover:text-gold-light transition-all duration-300 shadow-sm neu-outset flex items-center justify-center gap-1.5 focus-ring"
               >
                 <FiVideo size={14} />
                 {isInlinePlaying ? "Stop Video" : "Play Video Inline"}
               </button>
               <button
                 onClick={() => setGalleryOpen(true)}
-                className="px-5 py-2 rounded-lg text-xs uppercase tracking-wider font-bold border border-white/60 bg-surface text-gold hover:text-gold-light transition-all duration-300 shadow-sm neu-outset flex items-center gap-1.5 focus-ring"
+                className="px-5 py-2.5 rounded-lg text-xs uppercase tracking-wider font-bold border border-white/60 bg-surface text-gold hover:text-gold-light transition-all duration-300 shadow-sm neu-outset flex items-center justify-center gap-1.5 focus-ring"
               >
                 <FiTv size={14} />
                 Launch Media Hub Modal
@@ -249,7 +249,7 @@ export const EntertainmentShowcase: React.FC = () => {
         {/* Immersive Glassmorphic Media & Gallery Modal */}
         {galleryOpen && (
           <div
-            className="fixed inset-0 z-50 w-full h-screen bg-[#E4EBF5]/90 backdrop-blur-xl flex flex-col justify-center items-center p-4"
+            className="fixed inset-0 z-50 w-full h-screen bg-background/90 backdrop-blur-xl flex flex-col justify-center items-center p-4"
             onClick={() => setGalleryOpen(false)}
           >
             <div 

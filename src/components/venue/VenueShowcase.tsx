@@ -4,14 +4,12 @@ import React from 'react';
 import { SectionHeader } from '@/components/shared/SectionHeader';
 import { ScrollReveal } from '@/components/animations/ScrollReveal';
 import { venueShowcaseData } from '@/data/venueData';
-import { useRouter } from 'next/navigation';
 import { FiUsers, FiLayers, FiCompass } from 'react-icons/fi';
 
 export const VenueShowcase: React.FC = () => {
-  const router = useRouter();
 
   const handleScrollToVenueEnquiry = () => {
-    router.push('/contact?intent=venue');
+    window.location.hash = 'contact';
   };
 
   // Render highly premium responsive stylized vector floor plans

@@ -2,14 +2,14 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { cn } from '@/lib/utils';
+import { useDeck } from '@/context/DeckContext';
 import { 
   FiChevronLeft, 
   FiChevronRight, 
   FiShoppingBag, 
   FiAward, 
   FiSliders,
-  FiTrendingUp,
-  FiFolder,
   FiUsers,
   FiCalendar,
   FiBookOpen
@@ -48,15 +48,121 @@ const SLIDES = [
   { id: 'contact', label: 'Inquiry Registry', component: CTASystem }
 ];
 
+const SPEAKER_NOTES: Record<string, { title: string; notes: string[] }> = {
+  overview: {
+    title: "Dubai Mall Hook & Catchment",
+    notes: [
+      "Pitch the scale: 105M+ visitors annually (exceeds Disney, Times Sq).",
+      "Explain the Gateway funnel to investors: customized spatial routing.",
+      "Key stat: Avg visitor dwell time exceeds 3.5 hours."
+    ]
+  },
+  retail: {
+    title: "High-Performance Catchment",
+    notes: [
+      "Detail tenant success: 1,200+ active stores, double-digit YoY growth.",
+      "Pitch demographic matching: Custom fit based on brand category.",
+      "Footfall capture is organic, driven by anchors."
+    ]
+  },
+  luxury: {
+    title: "Luxury District Prestige",
+    notes: [
+      "Highlight Fashion Avenue expansion corridor.",
+      "Luxury average spend: $285 basket size (highest globally).",
+      "Exclusivity: Target HNWI shoppers via private valets and lounges."
+    ]
+  },
+  dining: {
+    title: "F&B Gastronomy Capture",
+    notes: [
+      "Highlight fine-dining Promenade waterfront terraces.",
+      "Dwell time: Food acts as a lifestyle catalyst, increasing store visits by 27%.",
+      "Highlight Michelin-starred chefs and unique café clusters."
+    ]
+  },
+  entertainment: {
+    title: "Attractions as Traffic Anchors",
+    notes: [
+      "Attractions (Aquarium, Rink) are not cost centers—they are anchors.",
+      "They generate 45% of first-time visitor flow.",
+      "Highlight cross-promotional retail marketing options."
+    ]
+  },
+  events: {
+    title: "Global Brand Activations",
+    notes: [
+      "Grand Atrium booking: 4,000 capacity, ideal for product rollouts.",
+      "Fountain Plaza: 8,000 capacity for high-impact celebrity campaigns.",
+      "Highlight billboard takeovers and OOH syncing."
+    ]
+  },
+  sponsorship: {
+    title: "Sponsorship Matrices",
+    notes: [
+      "Explain Platinum/Gold/Silver loops.",
+      "Reach: Digital OOH network guarantees 10M+ raw monthly impressions.",
+      "Mention naming rights and synchronized arena sponsorships."
+    ]
+  },
+  leasing: {
+    title: "Leasing Sandbox Walkthrough",
+    notes: [
+      "Guide prospect through the AI Spatial Matchmaker.",
+      "Adjust space/duration sliders dynamically to demonstrate yield.",
+      "Emphasize the long-term lease rate discounts (up to 12% off)."
+    ]
+  },
+  venues: {
+    title: "Venue Spatial blue-prints",
+    notes: [
+      "Present digital floor layouts and corridor placements.",
+      "Showcase technical specs (loading docks, ceiling height, logistics).",
+      "Transition candidate smoothly into formal Letter of Intent (LOI)."
+    ]
+  },
+  contact: {
+    title: "Attesting LOI & Deal Closing",
+    notes: [
+      "Review the auto-compiled Letter of Intent (LOI).",
+      "Verify that brand info and corridor matches are pre-filled.",
+      "Click Submit to commit terms to the Supabase CRM database."
+    ]
+  }
+};
+
 export const InteractiveDeck: React.FC = () => {
   const [activeSlide, setActiveSlide] = useState<number>(-1); // -1 represents the Gateway Entrance
   const [direction, setDirection] = useState<number>(1);
   const [intent, setIntent] = useState<string | null>(null);
 
+  // Presenter Mode bindings from Global Context
+  const {
+    isPresenterMode,
+    setIsPresenterMode,
+    showPresenterHUD,
+    setShowPresenterHUD,
+    setBrandCategory,
+    setSelectedZone
+  } = useDeck();
+
+  // Mouse coordinate tracking for virtual laser pointer
+  const [mousePos, setMousePos] = useState({ x: -100, y: -100 });
+
+  useEffect(() => {
+    if (!isPresenterMode) return;
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePos({ x: e.clientX, y: e.clientY });
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, [isPresenterMode]);
+
   // Sync hash updates with slide indexes
   useEffect(() => {
     const handleHashChange = () => {
-      const hash = window.location.hash.replace('#', '');
+      const hashParts = window.location.hash.split('#').filter(Boolean);
+      const hash = hashParts[hashParts.length - 1] || '';
       if (!hash) {
         setActiveSlide(-1);
         return;
@@ -88,14 +194,35 @@ export const InteractiveDeck: React.FC = () => {
     }
   };
 
-  // Keyboard navigation listener (left/right arrow keys)
+  // Keyboard navigation listener (left/right arrow keys & presenter hotkeys)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (activeSlide === -1) return; // Disable on Gateway slide
-      
       // Stop keyboard navigation inside text input forms
       const activeEl = document.activeElement;
       if (activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA' || activeEl.tagName === 'SELECT')) {
+        return;
+      }
+
+      // Presenter hotkeys
+      if (e.key.toLowerCase() === 'p') {
+        setIsPresenterMode(prev => !prev);
+        return;
+      }
+      if (e.key.toLowerCase() === 'h') {
+        setShowPresenterHUD(prev => !prev);
+        return;
+      }
+
+      if (activeSlide === -1) return; // Disable on Gateway slide
+
+      // Numeric shortcuts (1-9 go to slides 0-8, 0 goes to slide 9)
+      if (e.key >= '1' && e.key <= '9') {
+        const idx = parseInt(e.key) - 1;
+        if (idx < SLIDES.length) navigateToSlide(idx);
+        return;
+      }
+      if (e.key === '0') {
+        navigateToSlide(9); // Slide 10 / Contact Registry
         return;
       }
 
@@ -112,10 +239,20 @@ export const InteractiveDeck: React.FC = () => {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [activeSlide]);
+  }, [activeSlide, setIsPresenterMode, setShowPresenterHUD]);
 
   const selectIntentAndNavigate = (selectedIntent: string, targetSlideId: string) => {
     setIntent(selectedIntent);
+    
+    // Set matching context variables dynamically based on gateway click
+    if (selectedIntent === 'leasing') {
+      setBrandCategory('luxury-fashion');
+      setSelectedZone('Fashion Avenue Ground Floor');
+    } else if (selectedIntent === 'events') {
+      setBrandCategory('cafes-beverages');
+      setSelectedZone('The Grand Atrium Premium Axis');
+    }
+
     const index = SLIDES.findIndex((s) => s.id === targetSlideId);
     if (index !== -1) {
       navigateToSlide(index);
@@ -148,6 +285,59 @@ export const InteractiveDeck: React.FC = () => {
 
   return (
     <div className="relative w-full min-h-screen bg-background overflow-hidden flex flex-col">
+      {/* 🔴 Virtual Laser Pointer Overlay */}
+      {isPresenterMode && (
+        <div 
+          className="fixed pointer-events-none w-5 h-5 rounded-full bg-red-600/90 shadow-[0_0_15px_#ef4444,0_0_30px_#ef4444] z-[9999] -translate-x-1/2 -translate-y-1/2 transition-all duration-75 ease-out"
+          style={{ left: mousePos.x, top: mousePos.y }}
+        />
+      )}
+
+      {/* 🎤 Presenter HUD Notes Overlay */}
+      {isPresenterMode && showPresenterHUD && activeSlide !== -1 && (
+        <div className="fixed top-4 right-4 bottom-24 w-80 bg-slate-900/95 border border-slate-700/80 rounded-2xl p-6 text-white shadow-2xl z-[90] backdrop-blur-md flex flex-col justify-between font-sans">
+          <div>
+            <div className="flex justify-between items-center mb-4 border-b border-slate-700 pb-3">
+              <span className="text-[10px] tracking-[0.2em] font-bold text-gold uppercase">
+                Presenter HUD Notes
+              </span>
+              <button 
+                onClick={() => setShowPresenterHUD(false)}
+                className="text-[10px] text-slate-400 hover:text-white uppercase tracking-wider"
+              >
+                Hide
+              </button>
+            </div>
+            
+            <h4 className="text-sm font-semibold text-gold mb-3">
+              {SPEAKER_NOTES[SLIDES[activeSlide].id]?.title || 'Emaar Presentation Script'}
+            </h4>
+            
+            <ul className="space-y-3">
+              {(SPEAKER_NOTES[SLIDES[activeSlide].id]?.notes || [
+                "Walk through slide sections.",
+                "Reinforce Emaar brand heritage.",
+                "Highlight target commercial value."
+              ]).map((note, nIdx) => (
+                <li key={nIdx} className="text-[11px] text-slate-300 leading-relaxed list-disc list-inside">
+                  {note}
+                </li>
+              ))}
+            </ul>
+          </div>
+          
+          <div className="border-t border-slate-800 pt-4 mt-4">
+            <div className="flex items-center justify-between text-[9px] text-slate-400 uppercase tracking-widest font-bold">
+              <span>Hotkey Guide:</span>
+              <span>P: Toggle Mode | H: HUD</span>
+            </div>
+            <div className="text-[8px] text-slate-500 mt-2 leading-relaxed">
+              Use keys 1-9 to jump slides. Press 0 for B2B Registry.
+            </div>
+          </div>
+        </div>
+      )}
+
       <AnimatePresence initial={false} custom={direction} mode="wait">
         {activeSlide === -1 ? (
           /* ======================================================== */
@@ -163,7 +353,7 @@ export const InteractiveDeck: React.FC = () => {
             className="w-full min-h-screen flex flex-col justify-center items-center px-4 sm:px-6 md:px-12 py-24 select-none relative z-10"
           >
             {/* Drifting sparkle overlay background */}
-            <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden -z-10 bg-gradient-to-br from-[#E0E9F5]/45 via-[#F8FAFC] to-[#F1F6FA]">
+            <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden -z-10 bg-gradient-to-br from-slate-50 via-slate-100/50 to-slate-50">
               <img
                 src="/images/dubai_skyline.png"
                 alt="Downtown Dubai"
@@ -266,12 +456,12 @@ export const InteractiveDeck: React.FC = () => {
             className="w-full flex-1 flex flex-col relative"
           >
             {/* Render Slide Component */}
-            <div className="w-full flex-1 pl-0 lg:pl-24 pb-20 select-none">
+            <div className="w-full flex-1 pl-0 lg:pl-24 pb-36 overflow-y-auto select-text">
               {React.createElement(SLIDES[activeSlide].component)}
             </div>
 
-            {/* Slide Navigation Overlay Dock (Bottom Center) */}
-            <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-4 px-4 py-2.5 rounded-xl border border-white/60 bg-surface/75 backdrop-blur-md shadow-md neu-outset">
+            {/* Slide Navigation Overlay Dock (Bottom Center, elevated on mobile) */}
+            <div className="fixed bottom-24 lg:bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 md:gap-4 px-3 md:px-4 py-2.5 rounded-xl border border-white/60 bg-surface/75 backdrop-blur-md shadow-md neu-outset w-[90%] max-w-sm sm:max-w-md lg:w-auto justify-between lg:justify-start flex-wrap">
               {/* Previous button */}
               <button
                 onClick={() => activeSlide > 0 && navigateToSlide(activeSlide - 1)}
@@ -285,7 +475,7 @@ export const InteractiveDeck: React.FC = () => {
               </button>
 
               {/* Progress Tracker Numbers */}
-              <span className="text-[10px] font-sans uppercase font-bold tracking-widest text-text-secondary px-2">
+              <span className="text-[10px] font-sans uppercase font-bold tracking-widest text-text-secondary px-1 sm:px-2 whitespace-nowrap">
                 Slide {activeSlide + 1} / {SLIDES.length}
               </span>
 
@@ -301,14 +491,44 @@ export const InteractiveDeck: React.FC = () => {
                 <FiChevronRight size={18} />
               </button>
 
-              <div className="h-4 w-px bg-slate-200/80 mx-1" />
+              <div className="h-4 w-px bg-slate-200/80 mx-0.5 sm:mx-1" />
+
+              {/* Presenter Mode Toggle */}
+              <button
+                onClick={() => setIsPresenterMode(!isPresenterMode)}
+                className={cn(
+                  "px-2.5 py-1.5 rounded-lg border border-black/5 text-[9px] uppercase tracking-wider font-bold neu-button focus-ring flex items-center gap-1.5 transition-all duration-300",
+                  isPresenterMode ? "bg-gold/15 text-gold border-gold/30" : "bg-surface hover:bg-slate-50 text-text-secondary"
+                )}
+                title="Toggle Presenter Mode (Key: P)"
+              >
+                <FiSliders size={12} />
+                <span className="hidden md:inline">Presenter</span>
+              </button>
+
+              {/* Presenter HUD toggle if Presenter Mode is active */}
+              {isPresenterMode && (
+                <button
+                  onClick={() => setShowPresenterHUD(!showPresenterHUD)}
+                  className={cn(
+                    "px-2.5 py-1.5 rounded-lg border border-black/5 text-[9px] uppercase tracking-wider font-bold neu-button focus-ring flex items-center gap-1.5 transition-all duration-300",
+                    showPresenterHUD ? "bg-gold/15 text-gold border-gold/30" : "bg-surface hover:bg-slate-50 text-text-secondary"
+                  )}
+                  title="Toggle Presenter notes HUD (Key: H)"
+                >
+                  <FiUsers size={12} />
+                  <span className="hidden md:inline">HUD</span>
+                </button>
+              )}
+
+              <div className="h-4 w-px bg-slate-200/80 mx-0.5 sm:mx-1" />
 
               {/* Return to Gateway screen button */}
               <button
                 onClick={() => navigateToSlide(-1)}
-                className="px-3 py-1.5 rounded-lg border border-black/5 bg-surface hover:bg-slate-50 text-[9px] uppercase tracking-wider font-bold text-gold neu-button focus-ring"
+                className="px-2.5 sm:px-3 py-1.5 rounded-lg border border-black/5 bg-surface hover:bg-slate-50 text-[9px] uppercase tracking-wider font-bold text-gold neu-button focus-ring whitespace-nowrap"
               >
-                Exit to Portal
+                Exit
               </button>
             </div>
 

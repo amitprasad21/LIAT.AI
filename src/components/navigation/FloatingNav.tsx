@@ -149,7 +149,7 @@ export const FloatingNav: React.FC = () => {
       {/* Fullscreen Mobile Navigation Overlay */}
       <div
         className={cn(
-          'fixed inset-0 z-40 w-full h-screen bg-[#E4EBF5]/95 border border-white/60 backdrop-blur-xl flex flex-col justify-center items-center transition-all duration-500 ease-in-out lg:hidden',
+          'fixed inset-0 z-40 w-full h-screen bg-background/95 border border-white/60 backdrop-blur-xl flex flex-col justify-center items-center transition-all duration-500 ease-in-out lg:hidden',
           mobileMenuOpen ? 'opacity-100 pointer-events-auto translate-y-0' : 'opacity-0 pointer-events-none -translate-y-4'
         )}
       >

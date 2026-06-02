@@ -2,11 +2,9 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useRouter } from 'next/navigation';
 import { FiChevronDown } from 'react-icons/fi';
 
 export const HeroSection: React.FC = () => {
-  const router = useRouter();
 
   const handleScrollTo = (targetId: string) => {
     const element = document.getElementById(targetId);
@@ -53,7 +51,7 @@ export const HeroSection: React.FC = () => {
       aria-label="Welcome Presentation"
     >
       {/* Cinematic Sunset Background Video (with Image Fallback) */}
-      <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden -z-10 bg-gradient-to-br from-[#E0E9F5] via-[#E4EBF5] to-[#F1F6FA]">
+      <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden -z-10 bg-gradient-to-br from-slate-50 via-slate-100/50 to-slate-50">
         <video
           autoPlay
           loop
@@ -114,21 +112,21 @@ export const HeroSection: React.FC = () => {
           className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center w-full sm:w-auto"
         >
           <button
-            onClick={() => router.push('/leasing')}
+            onClick={() => window.location.hash = 'leasing'}
             className="px-8 py-4 rounded bg-gold text-background text-xs uppercase tracking-[0.2em] font-sans font-bold hover:bg-gold-light transition-all duration-300 shadow-[0_4px_20px_rgba(201,168,76,0.2)] hover:shadow-[0_4px_30px_rgba(201,168,76,0.35)] shimmer-btn focus-ring"
           >
             Lease Space
           </button>
           
           <button
-            onClick={() => router.push('/sponsorship')}
+            onClick={() => window.location.hash = 'sponsorship'}
             className="px-8 py-4 rounded border border-gold bg-transparent text-xs uppercase tracking-[0.2em] font-sans font-bold text-gold hover:bg-gold/10 transition-all duration-300 shimmer-btn focus-ring"
           >
             Become a Sponsor
           </button>
 
           <button
-            onClick={() => router.push('/venues')}
+            onClick={() => window.location.hash = 'venues'}
             className="px-8 py-4 rounded border border-gold/40 bg-transparent text-xs uppercase tracking-[0.2em] font-sans font-bold text-ivory hover:border-gold hover:bg-gold/10 transition-all duration-300 shimmer-btn focus-ring"
           >
             Book a Venue

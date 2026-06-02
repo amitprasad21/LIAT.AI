@@ -1,14 +1,17 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SectionHeader } from '@/components/shared/SectionHeader';
 import { ScrollReveal } from '@/components/animations/ScrollReveal';
 import { eventVenues, pastEvents } from '@/data/eventsData';
+import { useDeck } from '@/context/DeckContext';
 import { supabase } from '@/lib/supabase';
 import { cn } from '@/lib/utils';
 import { FiUsers, FiCheckCircle, FiChevronRight, FiX, FiCalendar, FiSend } from 'react-icons/fi';
 
 export const EventsPlatform: React.FC = () => {
+  const { brandName } = useDeck();
+
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedVenue, setSelectedVenue] = useState('Grand Atrium');
   const [formData, setFormData] = useState({
@@ -21,6 +24,13 @@ export const EventsPlatform: React.FC = () => {
     eventDate: ''
   });
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+
+  // Pre-fill company name from global context
+  useEffect(() => {
+    if (brandName && !formData.company) {
+      setFormData(prev => ({ ...prev, company: brandName }));
+    }
+  }, [brandName, formData.company]);
 
   // Find max capacity for percentage scaling in CSS bar charts
   const maxCapacity = Math.max(...eventVenues.map((v) => v.capacity));
@@ -269,7 +279,7 @@ export const EventsPlatform: React.FC = () => {
                     id="venue-name"
                     value={selectedVenue}
                     onChange={(e) => setSelectedVenue(e.target.value)}
-                    className="w-full px-4 py-2.5 bg-[#E4EBF5] neu-inset border border-white/60 rounded text-xs text-text-primary focus:border-gold transition-all duration-300 focus-ring"
+                    className="w-full px-4 py-2.5 bg-slate-50 neu-inset border border-white/60 rounded text-xs text-text-primary focus:border-gold transition-all duration-300 focus-ring"
                   >
                     <option value="Grand Atrium">Grand Atrium (4,000 Cap)</option>
                     <option value="Fashion Catwalk">Fashion Catwalk (1,200 Cap)</option>
@@ -288,7 +298,7 @@ export const EventsPlatform: React.FC = () => {
                     name="eventType"
                     value={formData.eventType}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-2.5 bg-[#E4EBF5] neu-inset border border-white/60 rounded text-xs text-text-primary focus:border-gold transition-all duration-300 focus-ring"
+                    className="w-full px-4 py-2.5 bg-slate-50 neu-inset border border-white/60 rounded text-xs text-text-primary focus:border-gold transition-all duration-300 focus-ring"
                   >
                     <option value="Product Launch">Global Product Launch</option>
                     <option value="Fashion Show">Haute Couture Runway Show</option>
@@ -313,7 +323,7 @@ export const EventsPlatform: React.FC = () => {
                     min="1"
                     value={formData.expectedAttendance}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-2.5 bg-[#E4EBF5] neu-inset border border-white/60 rounded text-xs text-text-primary focus:border-gold transition-all duration-300 focus-ring"
+                    className="w-full px-4 py-2.5 bg-slate-50 neu-inset border border-white/60 rounded text-xs text-text-primary focus:border-gold transition-all duration-300 focus-ring"
                   />
                 </div>
 
@@ -329,7 +339,7 @@ export const EventsPlatform: React.FC = () => {
                       required
                       value={formData.eventDate}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-2.5 bg-[#E4EBF5] neu-inset border border-white/60 rounded text-xs text-text-primary focus:border-gold transition-all duration-300 focus-ring"
+                      className="w-full px-4 py-2.5 bg-slate-50 neu-inset border border-white/60 rounded text-xs text-text-primary focus:border-gold transition-all duration-300 focus-ring"
                     />
                   </div>
                 </div>
@@ -348,7 +358,7 @@ export const EventsPlatform: React.FC = () => {
                     value={formData.name}
                     onChange={handleInputChange}
                     placeholder="e.g. Richard Rogers"
-                    className="w-full px-4 py-2.5 bg-[#E4EBF5] neu-inset border border-white/60 rounded text-xs text-text-primary focus:border-gold transition-all duration-300 focus-ring placeholder-slate-400"
+                    className="w-full px-4 py-2.5 bg-slate-50 neu-inset border border-white/60 rounded text-xs text-text-primary focus:border-gold transition-all duration-300 focus-ring placeholder-slate-400"
                   />
                 </div>
 
@@ -364,7 +374,7 @@ export const EventsPlatform: React.FC = () => {
                     value={formData.company}
                     onChange={handleInputChange}
                     placeholder="e.g. Rolex Middle East"
-                    className="w-full px-4 py-2.5 bg-[#E4EBF5] neu-inset border border-white/60 rounded text-xs text-text-primary focus:border-gold transition-all duration-300 focus-ring placeholder-slate-400"
+                    className="w-full px-4 py-2.5 bg-slate-50 neu-inset border border-white/60 rounded text-xs text-text-primary focus:border-gold transition-all duration-300 focus-ring placeholder-slate-400"
                   />
                 </div>
               </div>
@@ -382,7 +392,7 @@ export const EventsPlatform: React.FC = () => {
                     value={formData.email}
                     onChange={handleInputChange}
                     placeholder="e.g. r.rogers@rolex.com"
-                    className="w-full px-4 py-2.5 bg-[#E4EBF5] neu-inset border border-white/60 rounded text-xs text-text-primary focus:border-gold transition-all duration-300 focus-ring placeholder-slate-400"
+                    className="w-full px-4 py-2.5 bg-slate-50 neu-inset border border-white/60 rounded text-xs text-text-primary focus:border-gold transition-all duration-300 focus-ring placeholder-slate-400"
                   />
                 </div>
 
@@ -398,7 +408,7 @@ export const EventsPlatform: React.FC = () => {
                     value={formData.phone}
                     onChange={handleInputChange}
                     placeholder="e.g. +971 50 123 4567"
-                    className="w-full px-4 py-2.5 bg-[#E4EBF5] neu-inset border border-white/60 rounded text-xs text-text-primary focus:border-gold transition-all duration-300 focus-ring placeholder-slate-400"
+                    className="w-full px-4 py-2.5 bg-slate-50 neu-inset border border-white/60 rounded text-xs text-text-primary focus:border-gold transition-all duration-300 focus-ring placeholder-slate-400"
                   />
                 </div>
               </div>

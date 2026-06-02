@@ -106,7 +106,7 @@ export const VideoBackground: React.FC = () => {
   }, []);
 
   return (
-    <div className="absolute inset-0 w-full h-full pointer-events-none -z-10 bg-gradient-to-br from-[#E0E9F5] via-[#E4EBF5] to-[#F1F6FA]">
+    <div className="absolute inset-0 w-full h-full pointer-events-none -z-10 bg-gradient-to-br from-slate-50 via-slate-100/50 to-slate-50">
       <canvas ref={canvasRef} className="w-full h-full block opacity-75" />
     </div>
   );

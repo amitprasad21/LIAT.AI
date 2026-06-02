@@ -1,16 +1,22 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SectionHeader } from '@/components/shared/SectionHeader';
 import { ScrollReveal } from '@/components/animations/ScrollReveal';
-import { AnimatedCounter } from '@/components/animations/AnimatedCounter';
+import { useDeck } from '@/context/DeckContext';
 import { sponsorshipPackages, sponsorshipReachStats, activationTypes } from '@/data/sponsorshipData';
 import { supabase } from '@/lib/supabase';
 import { cn } from '@/lib/utils';
 import { FiCheck, FiSend, FiAward } from 'react-icons/fi';
 
 export const SponsorshipPlatform: React.FC = () => {
-  const [selectedTier, setSelectedTier] = useState<string>('PLATINUM');
+  const {
+    brandName,
+    setBrandName,
+    sponsorshipTier,
+    setSponsorshipTier
+  } = useDeck();
+
   const [formData, setFormData] = useState({
     brandName: '',
     contactName: '',
@@ -19,7 +25,14 @@ export const SponsorshipPlatform: React.FC = () => {
   });
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  // Sync brandName into state when loaded from gateway/leasing sandbox
+  useEffect(() => {
+    if (brandName && !formData.brandName) {
+      setFormData(prev => ({ ...prev, brandName }));
+    }
+  }, [brandName, formData.brandName]);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
@@ -36,7 +49,7 @@ export const SponsorshipPlatform: React.FC = () => {
     try {
       const { error } = await supabase.from('sponsorship_enquiries').insert([
         {
-          package_tier: selectedTier,
+          package_tier: (sponsorshipTier || 'platinum').toUpperCase(),
           brand_name: formData.brandName,
           contact_name: formData.contactName,
           email: formData.email,
@@ -53,6 +66,7 @@ export const SponsorshipPlatform: React.FC = () => {
         email: '',
         message: ''
       });
+      setSponsorshipTier('');
       setTimeout(() => setStatus('idle'), 5000);
     } catch (err) {
       console.error('Error submitting sponsorship inquiry:', err);
@@ -127,13 +141,18 @@ export const SponsorshipPlatform: React.FC = () => {
 
                 <button
                   onClick={() => {
-                    setSelectedTier(pkg.tier);
+                    setSponsorshipTier(pkg.tier.toLowerCase() as any);
                     const el = document.getElementById('sponsorship-inquiry-form');
                     if (el) el.scrollIntoView({ behavior: 'smooth' });
                   }}
-                  className="w-full mt-6 py-3.5 border border-gold hover:bg-gold hover:text-background rounded text-[10px] font-sans font-semibold uppercase tracking-widest text-gold transition-all duration-350 focus-ring"
+                  className={cn(
+                    "w-full mt-6 py-3.5 border rounded text-[10px] font-sans font-semibold uppercase tracking-widest transition-all duration-350 focus-ring",
+                    sponsorshipTier === pkg.tier.toLowerCase()
+                      ? "bg-gold text-background border-gold"
+                      : "border-gold hover:bg-gold hover:text-background text-gold"
+                  )}
                 >
-                  Configure package &rarr;
+                  {sponsorshipTier === pkg.tier.toLowerCase() ? 'Package Configured ✓' : 'Configure package'}
                 </button>
               </div>
             </ScrollReveal>
@@ -192,7 +211,7 @@ export const SponsorshipPlatform: React.FC = () => {
                   value={formData.brandName}
                   onChange={handleInputChange}
                   placeholder="e.g. Chanel Corporation"
-                  className="w-full px-4 py-3 bg-[#E4EBF5] neu-inset border border-white/60 rounded text-xs text-text-primary focus:border-gold transition-all duration-300 focus-ring placeholder-slate-400"
+                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200/80 rounded text-xs text-text-primary focus:border-gold transition-all duration-300 focus-ring placeholder-slate-400"
                 />
               </div>
 
@@ -208,7 +227,7 @@ export const SponsorshipPlatform: React.FC = () => {
                   value={formData.contactName}
                   onChange={handleInputChange}
                   placeholder="e.g. Charlotte Dubois"
-                  className="w-full px-4 py-3 bg-[#E4EBF5] neu-inset border border-white/60 rounded text-xs text-text-primary focus:border-gold transition-all duration-300 focus-ring placeholder-slate-400"
+                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200/80 rounded text-xs text-text-primary focus:border-gold transition-all duration-300 focus-ring placeholder-slate-400"
                 />
               </div>
             </div>
@@ -226,26 +245,17 @@ export const SponsorshipPlatform: React.FC = () => {
                   value={formData.email}
                   onChange={handleInputChange}
                   placeholder="e.g. c.dubois@chanel.com"
-                  className="w-full px-4 py-3 bg-[#E4EBF5] neu-inset border border-white/60 rounded text-xs text-text-primary focus:border-gold transition-all duration-300 focus-ring placeholder-slate-400"
+                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200/80 rounded text-xs text-text-primary focus:border-gold transition-all duration-300 focus-ring placeholder-slate-400"
                 />
               </div>
 
               <div>
-                <label htmlFor="selectedTier" className="block text-[10px] uppercase tracking-wider text-text-secondary mb-2 font-medium">
+                <label htmlFor="selectedTierSelect" className="block text-[10px] uppercase tracking-wider text-text-secondary mb-2 font-medium">
                   Select Requested Tier
                 </label>
-                <select
-                  id="selectedTier"
-                  name="selectedTier"
-                  value={selectedTier}
-                  onChange={(e) => setSelectedTier(e.target.value)}
-                  className="w-full px-4 py-3 bg-[#E4EBF5] neu-inset border border-white/60 rounded text-xs text-text-primary focus:border-gold transition-all duration-300 focus-ring"
-                >
-                  <option value="PLATINUM">PLATINUM ($500,000 / yr)</option>
-                  <option value="GOLD">GOLD ($250,000 / yr)</option>
-                  <option value="SILVER">SILVER ($100,000 / yr)</option>
-                  <option value="EVENT">SHORT-TERM EVENT ($25K–$75K)</option>
-                </select>
+                <div className="w-full px-4 py-3 bg-slate-100 rounded text-xs text-text-secondary border border-slate-200/40 select-none">
+                  {(sponsorshipTier || 'platinum').toUpperCase()} PACKAGE
+                </div>
               </div>
             </div>
 
@@ -261,7 +271,7 @@ export const SponsorshipPlatform: React.FC = () => {
                 value={formData.message}
                 onChange={handleInputChange}
                 placeholder="Outline details on desired digital OOH campaign timing, preferred locations, or event activations..."
-                className="w-full px-4 py-3 bg-[#E4EBF5] neu-inset border border-white/60 rounded text-xs text-text-primary focus:border-gold transition-all duration-300 focus-ring resize-none placeholder-slate-400"
+                className="w-full px-4 py-3 bg-slate-50 border border-slate-200/80 rounded text-xs text-text-primary focus:border-gold transition-all duration-300 focus-ring resize-none placeholder-slate-400"
               />
             </div>
 

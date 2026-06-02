@@ -4,14 +4,12 @@ import React from 'react';
 import { SectionHeader } from '@/components/shared/SectionHeader';
 import { ScrollReveal } from '@/components/animations/ScrollReveal';
 import { luxuryBrands, premiumBrands, anchorStores, retailOpportunities } from '@/data/retailBrands';
-import { useRouter } from 'next/navigation';
 import { FiChevronRight, FiMaximize2, FiShield, FiTrendingUp } from 'react-icons/fi';
 
 export const RetailExperience: React.FC = () => {
-  const router = useRouter();
 
   const handleScrollToLeasing = () => {
-    router.push('/leasing');
+    window.location.hash = 'leasing';
   };
 
   const getOpportunityIcon = (title: string) => {

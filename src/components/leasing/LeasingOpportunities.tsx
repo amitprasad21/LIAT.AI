@@ -1,35 +1,52 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SectionHeader } from '@/components/shared/SectionHeader';
 import { ScrollReveal } from '@/components/animations/ScrollReveal';
-import { leasingTerms, keyLeasingTerms } from '@/data/leasingData';
+import { useDeck, ZONE_METRICS } from '@/context/DeckContext';
+import { keyLeasingTerms } from '@/data/leasingData';
 import { supabase } from '@/lib/supabase';
 import { cn } from '@/lib/utils';
-import { FiMaximize, FiCheck, FiSend, FiInfo } from 'react-icons/fi';
+import { FiCheck, FiSend, FiInfo, FiSliders, FiActivity, FiMapPin } from 'react-icons/fi';
 
 export const LeasingOpportunities: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<string>('luxury-flagship');
+  const {
+    brandName,
+    setBrandName,
+    brandCategory,
+    setBrandCategory,
+    selectedZone,
+    setSelectedZone,
+    selectedSpaceSqft,
+    setSelectedSpaceSqft,
+    leaseDurationYears,
+    setLeaseDurationYears,
+    calculatedLeaseRate,
+    estimatedImpressions
+  } = useDeck();
+
   const [formData, setFormData] = useState({
     name: '',
     company: '',
-    category: 'luxury-fashion',
-    preferredZone: 'Fashion Avenue Ground Floor',
-    sqftRequirement: '',
     message: ''
   });
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
-  const activeTerm = leasingTerms.find((t) => t.id === activeTab) || leasingTerms[0];
+  // Synchronize form text fields when brand name changes
+  useEffect(() => {
+    if (brandName && !formData.name) {
+      setFormData(prev => ({ ...prev, name: brandName }));
+    }
+  }, [brandName, formData.name]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name || !formData.company || !formData.sqftRequirement || !formData.message) {
+    if (!formData.name || !formData.company || !formData.message) {
       alert('Please fill in all fields.');
       return;
     }
@@ -41,10 +58,10 @@ export const LeasingOpportunities: React.FC = () => {
         {
           name: formData.name,
           company: formData.company,
-          category: formData.category,
-          preferred_zone: formData.preferredZone,
-          sqft_requirement: formData.sqftRequirement,
-          message: formData.message,
+          category: brandCategory,
+          preferred_zone: selectedZone,
+          sqft_requirement: `${selectedSpaceSqft} sq ft`,
+          message: `${formData.message}\n\n[Sandbox Configuration: ${leaseDurationYears} years, Est. Rent: AED ${calculatedLeaseRate.toLocaleString()}/mo, Est. Annual Impressions: ${estimatedImpressions.toLocaleString()}]`,
         }
       ]);
 
@@ -54,9 +71,6 @@ export const LeasingOpportunities: React.FC = () => {
       setFormData({
         name: '',
         company: '',
-        category: 'luxury-fashion',
-        preferredZone: 'Fashion Avenue Ground Floor',
-        sqftRequirement: '',
         message: ''
       });
       setTimeout(() => setStatus('idle'), 5000);
@@ -65,6 +79,34 @@ export const LeasingOpportunities: React.FC = () => {
       setStatus('error');
       setTimeout(() => setStatus('idle'), 5000);
     }
+  };
+
+  // Helper to generate dynamic AI Matching insights on the fly
+  const getAIMatchScore = (zoneName: string) => {
+    const metrics = ZONE_METRICS[zoneName as keyof typeof ZONE_METRICS];
+    if (!metrics) return 70;
+
+    // Direct mapping match gives higher score
+    if (metrics.categoryMatch === brandCategory) return 98;
+    
+    // Luxury category likes Fashion Avenue & Grand Atrium
+    if (brandCategory === 'luxury-fashion' && (zoneName.includes('Fashion') || zoneName.includes('Grand Atrium'))) return 95;
+    
+    // Food category likes Waterfront & Atrium Walkways
+    if (brandCategory === 'fine-dining' && zoneName.includes('Waterfront')) return 97;
+    if (brandCategory === 'cafes-beverages' && zoneName.includes('Walkways')) return 96;
+
+    return 84; // baseline score for decent placement
+  };
+
+  const getAIMatchPitch = () => {
+    const score = getAIMatchScore(selectedZone);
+    const brandLabel = brandName || 'Your Brand';
+    
+    if (score >= 95) {
+      return `[AI Matching Signal] Highly Recommended: Placement of ${brandLabel} in the "${selectedZone}" yields an optimal synergy rating of ${score}%. This zone aligns precisely with target shopper clusters, capturing high HNW conversion rates (${ZONE_METRICS[selectedZone as keyof typeof ZONE_METRICS]?.hnwPct}% HNWI density) and delivering maximum average transaction velocities.`;
+    }
+    return `[AI Matching Signal] Qualified: Placement of ${brandLabel} in the "${selectedZone}" is rated at ${score}% suitability. This zone offers strong baseline footfall of ${(ZONE_METRICS[selectedZone as keyof typeof ZONE_METRICS]?.footfall / 1000000).toFixed(1)}M annually, making it a viable alternative allocation for high-visibility brand exposure.`;
   };
 
   return (
@@ -77,107 +119,214 @@ export const LeasingOpportunities: React.FC = () => {
         {/* Section Header */}
         <SectionHeader
           badge="08 / RETAIL LEASING"
-          title="Leasing Opportunities"
-          subtitle="Acquire physical real estate footprints inside the world's most lucrative mall."
-          description="We offer highly flexible commercial lease structures spanning elite luxury flagship fronts, premium modern high-streets, specialized F&B waterfront zones, and short-term experiential pop-up kiosks."
+          title="Leasing Sandbox"
+          subtitle="Acquire physical retail real estate footprints inside the world's most lucrative mall."
+          description="Do not guess your placement. Use our interactive B2B Sandbox to model target demographics, map physical zones, and compute estimated lease rates based on space size and duration."
         />
 
         {/* Tabbed interface layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start mb-24">
           
-          {/* Left Column: Premium Tabs & Spec Grid */}
-          <div className="lg:col-span-6 flex flex-col space-y-6">
+          {/* Left Column: B2B Commercial Sandbox */}
+          <div className="lg:col-span-7 flex flex-col space-y-6">
             
-            {/* Category Tab Buttons */}
-            <div className="flex gap-2 border-b border-gold/15 pb-4 overflow-x-auto no-scrollbar">
-              {leasingTerms.map((term) => (
-                <button
-                  key={term.id}
-                  onClick={() => setActiveTab(term.id)}
-                  className={cn(
-                    'px-4 py-2.5 rounded text-xs uppercase tracking-widest font-semibold border transition-all duration-300 shrink-0 focus-ring',
-                    activeTab === term.id
-                      ? 'bg-gold text-background border-gold'
-                      : 'bg-transparent border-gold/10 text-text-secondary hover:text-gold hover:border-gold/30'
-                  )}
-                >
-                  {term.tierName}
-                </button>
-              ))}
+            {/* Slide Subheader */}
+            <div className="flex items-center gap-2 mb-2">
+              <span className="w-2 h-2 rounded-full bg-gold animate-pulse" />
+              <h3 className="text-xs uppercase tracking-[0.25em] text-gold font-bold">
+                1. INTERACTIVE DESIGN PORTAL
+              </h3>
             </div>
 
-            {/* Selected Category Details Card */}
-            <ScrollReveal key={activeTerm.id} delay={0.05} className="rounded-lg bg-surface p-8 border border-gold/15 flex flex-col justify-between">
-              <div>
-                {/* Header status badge */}
-                <div className="flex justify-between items-center mb-6">
-                  <span className="text-sm font-display font-medium text-ivory">
-                    {activeTerm.tierName} Specifications
-                  </span>
-                  
-                  <span className={cn(
-                    'text-[9px] uppercase tracking-widest font-bold px-2 py-0.5 rounded border',
-                    activeTerm.status === 'Limited' && 'bg-crimson/10 border-crimson/30 text-red-400',
-                    activeTerm.status === 'Available' && 'bg-gold/10 border-gold/35 text-gold-light',
-                    activeTerm.status === 'Enquire' && 'bg-white/5 border-white/10 text-text-secondary'
-                  )}>
-                    {activeTerm.status} Status
-                  </span>
-                </div>
-
-                {/* Price and size highlights */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-                  <div className="p-4 rounded bg-[#E4EBF5] neu-inset border border-white/60">
-                    <span className="block text-[8px] uppercase tracking-wider text-text-secondary mb-1">
-                      Target Investment Rates
-                    </span>
-                    <span className="text-sm sm:text-base font-display font-semibold text-gold">
-                      {activeTerm.priceRange}
-                    </span>
-                  </div>
-                  <div className="p-4 rounded bg-[#E4EBF5] neu-inset border border-white/60">
-                    <span className="block text-[8px] uppercase tracking-wider text-text-secondary mb-1">
-                      Footprint Window Size
-                    </span>
-                    <span className="text-sm sm:text-base font-display font-semibold text-gold">
-                      {activeTerm.sizeRange}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Target Profiles */}
-                <div className="mb-6">
-                  <span className="block text-[10px] uppercase tracking-wider text-text-secondary mb-2.5 font-medium">
-                    Target Tenant Profile
-                  </span>
-                  <div className="space-y-1.5">
-                    {activeTerm.profiles.map((profile, pIdx) => (
-                      <div key={pIdx} className="flex items-center gap-2 text-xs text-text-secondary font-sans font-light">
-                        <FiCheck className="text-gold flex-shrink-0" size={12} />
-                        <span>{profile}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Designated Zones */}
+            {/* Config Card: Brand Profile */}
+            <div className="rounded-xl p-6 bg-surface border border-slate-200/80 shadow-sm">
+              <span className="block text-[10px] uppercase tracking-widest text-gold font-bold mb-4 flex items-center gap-1.5">
+                <FiActivity size={12} />
+                Brand Profiler Configuration
+              </span>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <span className="block text-[10px] uppercase tracking-wider text-text-secondary mb-2.5 font-medium">
-                    Pre-designated Mall Zones
-                  </span>
-                  <div className="flex flex-wrap gap-1.5">
-                    {activeTerm.zones.map((zone, zIdx) => (
-                      <span key={zIdx} className="text-[10px] font-sans px-2.5 py-1 rounded bg-[#E4EBF5] neu-inset border border-white/60 text-gold font-medium">
-                        {zone}
-                      </span>
-                    ))}
-                  </div>
+                  <label htmlFor="sandbox-brand" className="block text-[9px] uppercase tracking-wider text-text-secondary mb-1.5 font-medium">
+                    Brand / Nominee Name
+                  </label>
+                  <input
+                    id="sandbox-brand"
+                    type="text"
+                    value={brandName}
+                    onChange={(e) => setBrandName(e.target.value)}
+                    placeholder="e.g. Saint Laurent"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200/80 rounded text-xs text-text-primary focus:border-gold transition-all duration-300 focus-ring"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="sandbox-cat" className="block text-[9px] uppercase tracking-wider text-text-secondary mb-1.5 font-medium">
+                    Commercial Category
+                  </label>
+                  <select
+                    id="sandbox-cat"
+                    value={brandCategory}
+                    onChange={(e) => setBrandCategory(e.target.value)}
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200/80 rounded text-xs text-text-primary focus:border-gold transition-all duration-300 focus-ring"
+                  >
+                    <option value="luxury-fashion">Luxury Fashion & Couture</option>
+                    <option value="premium-apparel">Premium Apparel & Accessories</option>
+                    <option value="cosmetics-beauty">Cosmetics & Fragrances</option>
+                    <option value="fine-dining">Michelin Fine Dining</option>
+                    <option value="cafes-beverages">Bespoke Cafes & Beverages</option>
+                    <option value="consumer-tech">Consumer Technology</option>
+                    <option value="kiosk-accessories">Specialty Kiosk & Pop-Up</option>
+                  </select>
                 </div>
               </div>
-            </ScrollReveal>
+            </div>
+
+            {/* Config Card: Interactive Placement Map Grid */}
+            <div className="rounded-xl p-6 bg-surface border border-slate-200/80 shadow-sm">
+              <span className="block text-[10px] uppercase tracking-widest text-gold font-bold mb-4 flex items-center gap-1.5">
+                <FiMapPin size={12} />
+                Select Corridor Placement (Interactive Spatial Map)
+              </span>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {Object.keys(ZONE_METRICS).map((zoneName) => {
+                  const data = ZONE_METRICS[zoneName as keyof typeof ZONE_METRICS];
+                  const score = getAIMatchScore(zoneName);
+                  const isSelected = selectedZone === zoneName;
+
+                  return (
+                    <div
+                      key={zoneName}
+                      onClick={() => setSelectedZone(zoneName)}
+                      className={cn(
+                        'p-4 rounded-xl border cursor-pointer select-none transition-all duration-300 flex flex-col justify-between h-28 relative overflow-hidden',
+                        isSelected 
+                          ? 'bg-slate-50 border-gold shadow-md' 
+                          : 'bg-transparent border-slate-200 hover:border-gold/30 hover:bg-slate-50/30'
+                      )}
+                    >
+                      <div className="flex justify-between items-start gap-1 z-10">
+                        <span className="text-[10px] font-sans font-medium text-text-primary leading-tight max-w-[70%]">
+                          {zoneName}
+                        </span>
+                        <span className={cn(
+                          'text-[8px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider',
+                          score >= 95 ? 'bg-green-500/10 text-green-600 border border-green-500/25' : 'bg-gold/10 text-gold border border-gold/25'
+                        )}>
+                          {score}% AI Match
+                        </span>
+                      </div>
+
+                      <div className="flex justify-between items-end z-10 text-[9px] text-text-secondary font-sans font-light mt-2 border-t border-slate-100 pt-1.5">
+                        <span>Traffic: {(data.footfall / 1000000).toFixed(1)}M/yr</span>
+                        <span>HNW Index: {data.hnwPct}%</span>
+                      </div>
+
+                      {/* Small subtle indicator dots */}
+                      {isSelected && (
+                        <div className="absolute bottom-2 right-2 w-1.5 h-1.5 bg-gold rounded-full" />
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Config Card: ROI Sliders */}
+            <div className="rounded-xl p-6 bg-surface border border-slate-200/80 shadow-sm space-y-6">
+              <span className="block text-[10px] uppercase tracking-widest text-gold font-bold mb-2 flex items-center gap-1.5">
+                <FiSliders size={12} />
+                Financial ROI & Exposure Simulator
+              </span>
+
+              {/* Slider 1: Space Size */}
+              <div>
+                <div className="flex justify-between items-center mb-1.5">
+                  <label htmlFor="sqft-slider" className="text-[9px] uppercase tracking-wider text-text-secondary font-medium">
+                    Requested Footprint (Square Footage)
+                  </label>
+                  <span className="text-xs font-semibold text-gold">{selectedSpaceSqft.toLocaleString()} Sq Ft</span>
+                </div>
+                <input
+                  id="sqft-slider"
+                  type="range"
+                  min="500"
+                  max="10000"
+                  step="250"
+                  value={selectedSpaceSqft}
+                  onChange={(e) => setSelectedSpaceSqft(parseInt(e.target.value))}
+                  className="w-full accent-gold bg-slate-100 h-1.5 rounded-lg appearance-none cursor-pointer"
+                />
+                <div className="flex justify-between text-[8px] text-slate-400 mt-1">
+                  <span>500 sq ft (Pop-up size)</span>
+                  <span>10,000 sq ft (Megastore anchor)</span>
+                </div>
+              </div>
+
+              {/* Slider 2: Lease Duration */}
+              <div>
+                <div className="flex justify-between items-center mb-1.5">
+                  <label htmlFor="duration-slider" className="text-[9px] uppercase tracking-wider text-text-secondary font-medium">
+                    Lease Commitment Period
+                  </label>
+                  <span className="text-xs font-semibold text-gold">{leaseDurationYears} Year{leaseDurationYears > 1 ? 's' : ''}</span>
+                </div>
+                <input
+                  id="duration-slider"
+                  type="range"
+                  min="1"
+                  max="5"
+                  step="2"
+                  value={leaseDurationYears}
+                  onChange={(e) => setLeaseDurationYears(parseInt(e.target.value))}
+                  className="w-full accent-gold bg-slate-100 h-1.5 rounded-lg appearance-none cursor-pointer"
+                />
+                <div className="flex justify-between text-[8px] text-slate-400 mt-1">
+                  <span>1 Year (Short term trial)</span>
+                  <span>5 Years (Standard Flagship + 12% Disc.)</span>
+                </div>
+              </div>
+
+              {/* Simulation Result Panels */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-slate-100 pt-5">
+                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/50">
+                  <span className="block text-[8px] uppercase tracking-wider text-text-secondary mb-1 font-semibold">
+                    Estimated Lease Investment
+                  </span>
+                  <span className="text-base font-display font-bold text-text-primary">
+                    AED {calculatedLeaseRate.toLocaleString()} <span className="text-[10px] text-text-secondary font-sans font-normal">/ month</span>
+                  </span>
+                  <span className="block text-[8px] text-slate-400 mt-0.5">
+                    Est. ${(calculatedLeaseRate / 3.67).toLocaleString(undefined, { maximumFractionDigits: 0 })} USD / month
+                  </span>
+                </div>
+
+                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/50">
+                  <span className="block text-[8px] uppercase tracking-wider text-text-secondary mb-1 font-semibold">
+                    Target Annual Exposure Yield
+                  </span>
+                  <span className="text-base font-display font-bold text-gold">
+                    {estimatedImpressions.toLocaleString()} <span className="text-[10px] text-text-secondary font-sans font-normal">impressions / yr</span>
+                  </span>
+                  <span className="block text-[8px] text-slate-400 mt-0.5">
+                    Based on corridor catchment velocities
+                  </span>
+                </div>
+              </div>
+
+              {/* Dynamic AI Match Pitch */}
+              <div className="p-4 rounded-xl bg-gold/5 border border-gold/15 flex items-start gap-2.5">
+                <FiInfo className="text-gold flex-shrink-0 mt-0.5" size={14} />
+                <p className="text-[10px] font-sans text-text-secondary leading-relaxed font-light italic">
+                  {getAIMatchPitch()}
+                </p>
+              </div>
+
+            </div>
 
             {/* Key Lease Terms Checklist */}
-            <div className="p-4 rounded bg-[#E4EBF5]/50 border border-white/50 shadow-[4px_4px_10px_rgba(163,177,198,0.25)] flex items-start gap-3">
+            <div className="p-4 rounded bg-slate-50/50 border border-white/50 shadow-[4px_4px_10px_rgba(163,177,198,0.25)] flex items-start gap-3">
               <FiInfo className="text-gold flex-shrink-0 mt-0.5" size={16} />
               <div className="text-[11px] font-sans text-text-secondary font-light leading-relaxed">
                 <span className="font-semibold text-gold uppercase tracking-wider block mb-1">Key Contractual Frameworks</span>
@@ -190,119 +339,95 @@ export const LeasingOpportunities: React.FC = () => {
           </div>
 
           {/* Right Column: Inquiry Form */}
-          <div className="lg:col-span-6">
-            <ScrollReveal className="rounded-lg bg-surface border border-gold/15 p-8 md:p-10">
-              <h3 className="font-display text-xl font-medium text-ivory mb-6 text-center lg:text-left">
+          <div className="lg:col-span-5">
+            
+            <div className="flex items-center gap-2 mb-2">
+              <span className="w-2 h-2 rounded-full bg-gold" />
+              <h3 className="text-xs uppercase tracking-[0.25em] text-gold font-bold">
+                2. REGISTRATION INQUIRY
+              </h3>
+            </div>
+
+            <ScrollReveal className="rounded-xl bg-surface border border-slate-200/80 p-8 shadow-sm">
+              <h3 className="font-display text-lg font-medium text-text-primary mb-6 text-center lg:text-left">
                 Register Leasing Candidacy
               </h3>
               
               <form onSubmit={handleFormSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="name" className="block text-[9px] uppercase tracking-wider text-text-secondary mb-1.5 font-medium">
-                      Full Legal Name
-                    </label>
-                    <input
-                      id="name"
-                      name="name"
-                      type="text"
-                      required
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      placeholder="e.g. Jean-Luc Godard"
-                      className="w-full px-4 py-2.5 bg-[#E4EBF5] neu-inset border border-white/60 rounded text-xs text-text-primary focus:border-gold transition-all duration-300 focus-ring placeholder-slate-400"
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="company" className="block text-[9px] uppercase tracking-wider text-text-secondary mb-1.5 font-medium">
-                      Company / Organization Name
-                    </label>
-                    <input
-                      id="company"
-                      name="company"
-                      type="text"
-                      required
-                      value={formData.company}
-                      onChange={handleInputChange}
-                      placeholder="e.g. Dior Heritage Ltd."
-                      className="w-full px-4 py-2.5 bg-[#E4EBF5] neu-inset border border-white/60 rounded text-xs text-text-primary focus:border-gold transition-all duration-300 focus-ring placeholder-slate-400"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="category" className="block text-[9px] uppercase tracking-wider text-text-secondary mb-1.5 font-medium">
-                      Retail Category
-                    </label>
-                    <select
-                      id="category"
-                      name="category"
-                      value={formData.category}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-2.5 bg-[#E4EBF5] neu-inset border border-white/60 rounded text-xs text-text-primary focus:border-gold transition-all duration-300 focus-ring"
-                    >
-                      <option value="luxury-fashion">Luxury Fashion & Couture</option>
-                      <option value="premium-apparel">Premium Apparel & Accessories</option>
-                      <option value="cosmetics-beauty">Cosmetics & Fragrances</option>
-                      <option value="fine-dining">Michelin Fine Dining</option>
-                      <option value="cafes-beverages">Bespoke Cafes & Beverages</option>
-                      <option value="consumer-tech">Consumer Technology</option>
-                      <option value="kiosk-accessories">Specialty Kiosk & Pop-Up</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label htmlFor="preferredZone" className="block text-[9px] uppercase tracking-wider text-text-secondary mb-1.5 font-medium">
-                      Preferred Mall Corridor Zone
-                    </label>
-                    <select
-                      id="preferredZone"
-                      name="preferredZone"
-                      value={formData.preferredZone}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-2.5 bg-[#E4EBF5] neu-inset border border-white/60 rounded text-xs text-text-primary focus:border-gold transition-all duration-300 focus-ring"
-                    >
-                      <option value="Fashion Avenue Ground Floor">Fashion Avenue Ground Floor</option>
-                      <option value="The Grand Atrium Premium Axis">The Grand Atrium Premium Axis</option>
-                      <option value="Central Galleria Corridors">Central Galleria Corridors</option>
-                      <option value="The Village (Urban Lifestyle)">The Village (Urban Lifestyle)</option>
-                      <option value="Waterfront Promenade Terrace">Waterfront Promenade Terrace</option>
-                      <option value="Atrium Pedestrian Walkways">Atrium Pedestrian Walkways</option>
-                    </select>
-                  </div>
-                </div>
-
                 <div>
-                  <label htmlFor="sqftRequirement" className="block text-[9px] uppercase tracking-wider text-text-secondary mb-1.5 font-medium">
-                    Requested Square Footage Requirement
+                  <label htmlFor="candidacy-name" className="block text-[9px] uppercase tracking-wider text-text-secondary mb-1.5 font-medium">
+                    Full Representative Name
                   </label>
                   <input
-                    id="sqftRequirement"
-                    name="sqftRequirement"
+                    id="candidacy-name"
+                    name="name"
                     type="text"
                     required
-                    value={formData.sqftRequirement}
+                    value={formData.name}
                     onChange={handleInputChange}
-                    placeholder="e.g. 4,500 sq ft"
-                    className="w-full px-4 py-2.5 bg-[#E4EBF5] neu-inset border border-white/60 rounded text-xs text-text-primary focus:border-gold transition-all duration-300 focus-ring placeholder-slate-400"
+                    placeholder="e.g. Jean-Luc Godard"
+                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200/80 rounded text-xs text-text-primary focus:border-gold transition-all duration-300 focus-ring placeholder-slate-400"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="message" className="block text-[9px] uppercase tracking-wider text-text-secondary mb-1.5 font-medium">
+                  <label htmlFor="candidacy-company" className="block text-[9px] uppercase tracking-wider text-text-secondary mb-1.5 font-medium">
+                    Company / Organization Name
+                  </label>
+                  <input
+                    id="candidacy-company"
+                    name="company"
+                    type="text"
+                    required
+                    value={formData.company}
+                    onChange={handleInputChange}
+                    placeholder="e.g. Dior Heritage Ltd."
+                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200/80 rounded text-xs text-text-primary focus:border-gold transition-all duration-300 focus-ring placeholder-slate-400"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-[9px] uppercase tracking-wider text-text-secondary mb-1.5 font-medium">
+                      Retail Category
+                    </label>
+                    <div className="w-full px-4 py-2.5 bg-slate-100 rounded text-xs text-text-secondary border border-slate-200/40 select-none">
+                      {brandCategory.replace('-', ' ').toUpperCase()}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-[9px] uppercase tracking-wider text-text-secondary mb-1.5 font-medium">
+                      Corridor Allocation
+                    </label>
+                    <div className="w-full px-4 py-2.5 bg-slate-100 rounded text-xs text-text-secondary border border-slate-200/40 select-none overflow-hidden text-ellipsis whitespace-nowrap">
+                      {selectedZone}
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-[9px] uppercase tracking-wider text-text-secondary mb-1.5 font-medium">
+                    Requested Size Constraint
+                  </label>
+                  <div className="w-full px-4 py-2.5 bg-slate-100 rounded text-xs text-text-secondary border border-slate-200/40 select-none">
+                    {selectedSpaceSqft.toLocaleString()} Sq Ft
+                  </div>
+                </div>
+
+                <div>
+                  <label htmlFor="candidacy-message" className="block text-[9px] uppercase tracking-wider text-text-secondary mb-1.5 font-medium">
                     Executive Summary of Retail Concept
                   </label>
                   <textarea
-                    id="message"
+                    id="candidacy-message"
                     name="message"
                     required
                     rows={4}
                     value={formData.message}
                     onChange={handleInputChange}
                     placeholder="Describe your brand's retail presence, architectural design themes, existing global footprints, and estimated target launch cycles..."
-                    className="w-full px-4 py-2.5 bg-[#E4EBF5] neu-inset border border-white/60 rounded text-xs text-text-primary focus:border-gold transition-all duration-300 focus-ring resize-none placeholder-slate-400"
+                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200/80 rounded text-xs text-text-primary focus:border-gold transition-all duration-300 focus-ring resize-none placeholder-slate-400"
                   />
                 </div>
 
@@ -321,24 +446,19 @@ export const LeasingOpportunities: React.FC = () => {
                 <button
                   type="submit"
                   disabled={status === 'loading'}
-                  className="w-full mt-4 py-3.5 rounded bg-gold text-background text-xs uppercase tracking-[0.25em] font-sans font-bold hover:bg-gold-light transition-all duration-300 flex items-center justify-center gap-2 focus-ring disabled:opacity-50"
+                  className="w-full py-3 rounded bg-gold text-background text-xs uppercase tracking-[0.2em] font-sans font-bold hover:bg-gold-light transition-all duration-300 flex items-center justify-center gap-2 focus-ring disabled:opacity-50"
                 >
-                  {status === 'loading' ? (
-                    'Saving Retail Inquiry...'
-                  ) : (
-                    <>
-                      File Retail Space Request
-                      <FiSend size={12} />
-                    </>
-                  )}
+                  <FiSend size={12} />
+                  {status === 'loading' ? 'Submitting Application...' : 'Register Leasing Candidacy'}
                 </button>
               </form>
             </ScrollReveal>
+
           </div>
 
         </div>
+
       </div>
     </section>
   );
 };
-export default LeasingOpportunities;
