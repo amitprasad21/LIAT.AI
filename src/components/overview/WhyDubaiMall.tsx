@@ -12,6 +12,17 @@ const DOWNTOWN_GALLERY = [
   '/images/dubai_skyline.png',
 ];
 
+const STAT_IMAGES: Record<string, string> = {
+  visitors: '/images/downtown_showcase.png', // Annual Traffic
+  outlets: '/images/tech_flagship_store.png', // Tenancy Density
+  gla: '/images/mall_future_expansion.png', // Gross Leasable Area
+  dining: '/images/waterfront_dining.png', // F&B Concessions
+  nationalities: '/images/dubai_skyline.png', // Global Markets
+  sales: '/images/premium_showroom.png', // Annual Sales Velocity
+  luxury: '/images/fashion_avenue_luxury.png', // Luxury Outlets
+  social: '/images/holographic_ooh_ads.png', // Digital OOH Reach
+};
+
 export const WhyDubaiMall: React.FC = () => {
   const [galleryOpen, setGalleryOpen] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -53,6 +64,7 @@ export const WhyDubaiMall: React.FC = () => {
               value={stat.value}
               suffix={stat.suffix}
               description={stat.description}
+              image={STAT_IMAGES[stat.id]}
               delay={idx * 0.05}
             />
           ))}
