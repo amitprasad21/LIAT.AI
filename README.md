@@ -1,6 +1,6 @@
-# Dubai Mall | B2B Cinematic Interactive Presenter & Commercial Sandbox
+# 🌌 Dubai Mall | B2B Cinematic Interactive Presenter & Commercial Sandbox
 
-[![Next.js](https://img.shields.io/badge/Next.js-15.0-blue?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-16.2-blue?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19.0-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4.0-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 [![Supabase](https://img.shields.io/badge/Supabase-Database-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com/)
@@ -28,7 +28,6 @@ graph TD
 ### 🎤 Presenter Mode (For Live Sales Calls & Screen Shares)
 Tailored for Emaar sales representatives to lead high-stakes video pitches:
 * **Presenter HUD Overlay:** A quick-toggle control overlay offering speaker notes, regional pitch cues, and target demographics for the active slide.
-* **Interactive Markup Layer:** A virtual laser pointer allowing the presenter to draw highlights directly on spatial layout plans.
 * **Keyboard Hotkey Matrix:** Numeric and arrow hotkeys to rapidly skip slides, toggle demographical data overlays, or launch high-definition walkthrough videos without mouse clicks.
 
 ### 🏗️ B2B Sandbox Mode (For Independent Prospect Exploration)
@@ -38,35 +37,56 @@ Designed for brand CFOs and agency partners evaluating the property on their own
 * **Storefront Activation Visualizer:** Shows AI-generated design concepts of flagships and billboards inside Emaar's digital environments to build immediate emotional buy-in.
 * **Dynamic Term-Sheet Configurer:** Slider-based financial estimators that estimate monthly exposure value, CPM metrics, and leasing rates based on space constraints and duration.
 
-### ✍️ The "Close-the-Deal" Letter of Intent (LOI) Funnel
-Rather than ending with a static contact form, the final slide generates a **dynamic B2B Letter of Intent (LOI)**. The document automatically summarizes the user’s selected retail format, preferred corridor, requested square footage, and budget parameters. Submitting the LOI writes directly to the Supabase commercial registry, alerting the leasing team with qualified lead parameters.
+---
+
+## 🎭 2. Hidden Features & Presenter Superpowers (Developer Easter Eggs)
+
+The application contains several highly optimized, non-obvious engineering features designed to deliver a flawless, high-end pitching experience:
+
+### ⚡ GPU-Accelerated Virtual Laser Pointer
+* **How it works:** Toggle **Presenter Mode** (`P` key) to activate a red glowing laser pointer for screen sharing.
+* **Under the Hood:** Rather than updating React state coordinates on mouse movements (which triggers Virtual DOM updates and causes trailing input lag), the laser tracks the cursor using a React `useRef` directly writing `translate3d` coordinates to the DOM's style layer. The layer has styling hooks with `will-change-transform` to force GPU compositing, keeping the tracking lag-free at the browser's native refresh rate.
+
+### ⌨️ Presenter Keybindings Matrix (Zero-Click Navigation)
+* **`P`**: Toggle Presenter Mode on/off.
+* **`H`**: Toggle Speaker Notes HUD card.
+* **`1` to `9`**: Jump instantly to slides 1 to 9 (Overview to Venue Showcase).
+* **`0`**: Jump instantly to slide 10 (Inquiry Registry / Commercial LOI Attestation).
+* **`Left / Right Arrows`**: Move slides back and forth smoothly.
+* *Note: Key listeners automatically disable themselves when typing inside text inputs, textareas, or drop-down selects to prevent navigation interruptions.*
+
+### 🛡️ Smart State Preservation Context
+* **How it works:** Unlike standard multi-page sites where navigation resets inputs, the entire application synchronizes its state globally.
+* **Under the Hood:** A global `DeckContext` provider binds the brand profiler, selected corridors, slider estimates, and LOI attestation together. If a prospect selects "Fashion Avenue Ground Floor" on the Sandbox slide, that data persists to compile and sign their custom B2B Letter of Intent on the final slide.
+
+### 🧭 Smart Path Redirect Fallbacks
+* **How it works:** Standard slide decks fail when a user accesses internal slide paths directly.
+* **Under the Hood:** Next.js pages (e.g., `/leasing`, `/events`, `/overview`) act as route intercepts. When loaded directly, they run a silent client-side replace redirect pointing the user to the main canvas with the respective anchor hash (`/#leasing`, `/#venues`), mounting the correct slide context smoothly.
 
 ---
 
-## 🎨 2. Design System & Aesthetics (Apple/Tesla Minimalist Luxury)
+## 🎨 3. Design System & Aesthetics (Apple/Tesla Minimalist Luxury)
 
 Following premium design directions, the application rejects heavy dark themes or high-contrast neumorphic shadows in favor of a clean, light-mode design system:
 * **Luxury Slate Canvas:** A light slate-gray canvas (`#F8FAFC`) gives elements adequate room to breathe.
-* **Minimalist Glass Surfaces:** Cards and panels are rendered as clean, flat white glass cards with hairline borders (`rgba(0, 0, 0, 0.05)`) and ultra-subtle ambient drop shadows (`0 8px 30px rgba(0, 0, 0, 0.025)`).
+* **Minimalist Glass Surfaces:** Cards and panels are rendered as clean, flat white glass cards with hairline borders (`rgba(0, 0, 0, 0.05)`) and ultra-subtle ambient drop shadows.
 * **Cinematic Video Integration:** Autoplay background video loops with custom radial glass vignettes to keep overlay typography readable.
 * **High-Contrast Typography:** Modern typography grids using editorial fonts deliver a premium presentation feel.
 
 ---
 
-## 🛠️ 3. Technical Stack & Architecture
+## 🛠️ 4. Technical Stack & Architecture
 
-* **Framework:** Next.js `15.0` App Router (with React Compiler enabled for render optimizations).
-* **Frontend:** React `19.0` & TypeScript.
-* **Styling:** Tailwind CSS `v4.0.0` (utilizing `@theme` configuration directives).
+* **Framework:** Next.js `16.2.7` App Router (utilizing Turbopack and React Compiler).
+* **Frontend:** React `19.2.4` & TypeScript `5.x`.
+* **Styling:** Tailwind CSS `v4` (utilizing `@theme` configuration directives).
 * **Animation:** Framer Motion (scroll-triggered fades, section staggers, physics-based slide sweeps).
 * **Database Connection:** Supabase Client (direct client insertion mapping for inquiry entries).
 * **Icons:** React Icons.
 
 ---
 
-## 📂 4. Modular Directory Structure
-
-The codebase is organized modularly to support easy expansion into deeper clickable sub-modules:
+## 📂 5. Modular Directory Structure
 
 ```
 src/
@@ -86,13 +106,15 @@ src/
 ├── data/
 │   └── [feature]Data.ts   # Decoupled commercial metrics, pricing guides, and specifications
 └── lib/
-    ├── utils.ts           # Tailwind ClassName merge utility
-    └── supabase.ts        # Database client initialization node
+│   ├── utils.ts           # Tailwind ClassName merge utility
+│   └── supabase.ts        # Database client initialization node
+└── hooks/
+    └── useIntersectionObserver.ts # Optimized viewport threshold listener
 ```
 
 ---
 
-## 🚀 5. Quick-Start Setup Guide
+## 🚀 6. Quick-Start Setup Guide
 
 Follow these steps to run the interactive sales deck locally:
 
@@ -114,14 +136,15 @@ npm run dev
 ```
 Open [http://localhost:3000](http://localhost:3000) inside your web browser.
 
-### 4. Verify Production Compilation:
+### 4. Verify Production Compilation & Linting:
 ```bash
+npm run lint
 npm run build
 ```
 
 ---
 
-## 📈 6. Evaluation Criteria Coverage
+## 📈 7. Evaluation Criteria Coverage
 
 | Criteria | Weight | Implementation Details in This Project |
 | :--- | :--- | :--- |
