@@ -9,11 +9,11 @@ import { supabase } from '@/lib/supabase';
 import { FiUsers, FiCheckCircle, FiChevronRight, FiX, FiSend } from 'react-icons/fi';
 
 const VENUE_IMAGES: Record<string, string> = {
-  'grand-atrium': 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=600&q=80',
-  'fashion-catwalk': '/images/runway_event_setup.png', // AI-Imagined Catwalk Setup
-  'fountain-plaza': 'https://images.unsplash.com/photo-1534008897995-27a23e859048?auto=format&fit=crop&w=600&q=80',
-  'ice-rink-event': 'https://images.unsplash.com/photo-1518063319789-7217e6706b04?auto=format&fit=crop&w=600&q=80',
-  'old-town-island': 'https://images.unsplash.com/photo-1582672060674-bc2bd808a8b5?auto=format&fit=crop&w=600&q=80'
+  'grand-atrium': '/images/grand_atrium_setup.png', // AI Grand Atrium Setup
+  'fashion-catwalk': '/images/runway_event_setup.png', // AI Runway Event Setup
+  'fountain-plaza': '/images/waterfront_venue_setup.png', // AI Waterfront Venue Setup
+  'ice-rink-event': '/images/ice_rink_setup.png', // AI Ice Rink Setup
+  'old-town-island': '/images/downtown_showcase.png' // AI Downtown / Old Town Island Setup
 };
 
 export const EventsPlatform: React.FC = () => {

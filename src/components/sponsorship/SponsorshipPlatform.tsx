@@ -10,10 +10,10 @@ import { cn } from '@/lib/utils';
 import { FiCheck, FiSend, FiAward } from 'react-icons/fi';
 
 const SUITE_IMAGES: Record<string, string> = {
-  platinum: 'https://images.unsplash.com/photo-1634973357973-f2ed255753e1?auto=format&fit=crop&w=600&q=80',
-  gold: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80',
-  silver: 'https://images.unsplash.com/photo-1618005198143-e528346d9a59?auto=format&fit=crop&w=600&q=80',
-  event: 'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=600&q=80'
+  platinum: '/images/premium_showroom.png', // AI Premium Showroom
+  gold: '/images/luxury_watch_salon.png', // AI Luxury Watch Salon
+  silver: '/images/tech_flagship_store.png', // AI Tech Flagship Store
+  event: '/images/runway_event_setup.png' // AI Runway Event Setup
 };
 
 const ACTIVATION_IMAGES: Record<string, string> = {
@@ -21,7 +21,7 @@ const ACTIVATION_IMAGES: Record<string, string> = {
   'Digital OOH': '/images/holographic_ooh_ads.png', // AI Holographic Ads
   'Social Integration': 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=600&q=80', // Social/smartphone
   'In-Store Showcase': '/images/luxury_jewelry.png', // AI Luxury Jewelry
-  'Event Partnerships': 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=600&q=80', // Event Partnerships
+  'Event Partnerships': '/images/grand_atrium_setup.png', // AI Grand Atrium Event
   'Sampling Campaigns': 'https://images.unsplash.com/photo-1556742044-3c52d6e88c62?auto=format&fit=crop&w=600&q=80' // Customer/Sampling
 };
 
