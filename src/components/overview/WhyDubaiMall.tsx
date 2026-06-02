@@ -76,14 +76,24 @@ export const WhyDubaiMall: React.FC = () => {
           <div className="lg:col-span-6 flex flex-col space-y-8">
             {/* Feature Card 1: Prime Location */}
             <ScrollReveal delay={0.1}>
-              <div className="flex gap-6 p-6 rounded-lg bg-surface border border-gold/10 hover:border-gold/30 transition-all duration-300">
-                <div className="flex-shrink-0 p-3 bg-gold/10 rounded border border-gold/20 h-fit text-gold">
-                  <FiMapPin size={24} />
+              <div className="flex flex-col sm:flex-row gap-6 p-6 rounded-lg bg-surface border border-gold/10 hover:border-gold/30 transition-all duration-300 group">
+                <div className="w-full sm:w-36 h-28 sm:h-auto rounded-md overflow-hidden relative border border-gold/20 flex-shrink-0 transition-colors duration-300">
+                  <img
+                    src="/images/dubai_skyline.png"
+                    alt="Preeminent Location"
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-750 group-hover:scale-105 pointer-events-none sepia-[0.2] saturate-[0.9] contrast-[1.05] brightness-[0.85]"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/50 via-transparent to-gold/10 pointer-events-none" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-display font-medium text-gold-light mb-2">
-                    Preeminent Location
-                  </h3>
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="p-2.5 bg-gold/10 rounded border border-gold/20 text-gold flex items-center justify-center">
+                      <FiMapPin size={18} />
+                    </div>
+                    <h3 className="text-base font-display font-medium text-gold-light">
+                      Preeminent Location
+                    </h3>
+                  </div>
                   <p className="text-xs uppercase tracking-wider text-text-secondary mb-3">
                     {locationData.address}
                   </p>
@@ -98,15 +108,25 @@ export const WhyDubaiMall: React.FC = () => {
 
             {/* Feature Card 2: Elite Audience */}
             <ScrollReveal delay={0.2}>
-              <div className="flex gap-6 p-6 rounded-lg bg-surface border border-gold/10 hover:border-gold/30 transition-all duration-300">
-                <div className="flex-shrink-0 p-3 bg-gold/10 rounded border border-gold/20 h-fit text-gold">
-                  <FiUsers size={24} />
+              <div className="flex flex-col sm:flex-row gap-6 p-6 rounded-lg bg-surface border border-gold/10 hover:border-gold/30 transition-all duration-300 group">
+                <div className="w-full sm:w-36 h-28 sm:h-auto rounded-md overflow-hidden relative border border-gold/20 flex-shrink-0 transition-colors duration-300">
+                  <img
+                    src="/images/luxury_watch_salon.png"
+                    alt="High-Worth Audiences"
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-750 group-hover:scale-105 pointer-events-none sepia-[0.2] saturate-[0.9] contrast-[1.05] brightness-[0.85]"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/50 via-transparent to-gold/10 pointer-events-none" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-display font-medium text-gold-light mb-2">
-                    High-Worth Audiences
-                  </h3>
-                  <p className="text-sm text-text-secondary leading-relaxed mb-3 font-sans font-light">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="p-2.5 bg-gold/10 rounded border border-gold/20 text-gold flex items-center justify-center">
+                      <FiUsers size={18} />
+                    </div>
+                    <h3 className="text-base font-display font-medium text-gold-light">
+                      High-Worth Audiences
+                    </h3>
+                  </div>
+                  <p className="text-xs text-text-secondary leading-relaxed mb-3 font-sans font-light">
                     An ultra-premium visitor base featuring massive dwell times and elevated spending transactions.
                   </p>
                   <div className="grid grid-cols-2 gap-4 text-xs font-sans text-gold-light">
@@ -133,18 +153,28 @@ export const WhyDubaiMall: React.FC = () => {
 
             {/* Feature Card 3: Economic Hub */}
             <ScrollReveal delay={0.3}>
-              <div className="flex gap-6 p-6 rounded-lg bg-surface border border-gold/10 hover:border-gold/30 transition-all duration-300">
-                <div className="flex-shrink-0 p-3 bg-gold/10 rounded border border-gold/20 h-fit text-gold">
-                  <FiTrendingUp size={24} />
+              <div className="flex flex-col sm:flex-row gap-6 p-6 rounded-lg bg-surface border border-gold/10 hover:border-gold/30 transition-all duration-300 group">
+                <div className="w-full sm:w-36 h-28 sm:h-auto rounded-md overflow-hidden relative border border-gold/20 flex-shrink-0 transition-colors duration-300">
+                  <img
+                    src="/images/mall_future_expansion.png"
+                    alt="Economic Gateway"
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-750 group-hover:scale-105 pointer-events-none sepia-[0.2] saturate-[0.9] contrast-[1.05] brightness-[0.85]"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/50 via-transparent to-gold/10 pointer-events-none" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-display font-medium text-gold-light mb-2">
-                    Economic Gateway
-                  </h3>
-                  <p className="text-sm text-text-secondary leading-relaxed font-sans font-light">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="p-2.5 bg-gold/10 rounded border border-gold/20 text-gold flex items-center justify-center">
+                      <FiTrendingUp size={18} />
+                    </div>
+                    <h3 className="text-base font-display font-medium text-gold-light">
+                      Economic Gateway
+                    </h3>
+                  </div>
+                  <p className="text-xs text-text-secondary leading-relaxed font-sans font-light">
                     Commanding {locationData.catchment.residents}.
                   </p>
-                  <p className="text-sm text-gold/80 italic font-accent mt-2">
+                  <p className="text-xs text-gold/80 italic font-accent mt-2">
                     {locationData.catchment.markets}
                   </p>
                 </div>
