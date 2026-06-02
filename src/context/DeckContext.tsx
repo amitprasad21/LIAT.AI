@@ -38,8 +38,8 @@ interface DeckContextType {
   // Calculated Lease / Sponsor Info
   calculatedLeaseRate: number; // monthly
   estimatedImpressions: number; // annual
-  sponsorshipTier: 'platinum' | 'gold' | 'silver' | '';
-  setSponsorshipTier: (val: 'platinum' | 'gold' | 'silver' | '') => void;
+  sponsorshipTier: 'platinum' | 'gold' | 'silver' | 'event' | '';
+  setSponsorshipTier: (val: 'platinum' | 'gold' | 'silver' | 'event' | '') => void;
 
   // Interactive LOI
   loiAgreed: boolean;
@@ -62,7 +62,7 @@ export const DeckProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [selectedZone, setSelectedZone] = useState('Fashion Avenue Ground Floor');
   const [selectedSpaceSqft, setSelectedSpaceSqft] = useState(2500);
   const [leaseDurationYears, setLeaseDurationYears] = useState(3);
-  const [sponsorshipTier, setSponsorshipTier] = useState<'platinum' | 'gold' | 'silver' | ''>('');
+  const [sponsorshipTier, setSponsorshipTier] = useState<'platinum' | 'gold' | 'silver' | 'event' | ''>('');
   const [loiAgreed, setLoiAgreed] = useState(false);
 
   // Live lease rate calculation

@@ -14,6 +14,15 @@ const AQUARIUM_GALLERY = [
   '/images/dubai_skyline.png',
 ];
 
+const ATTRACTION_IMAGES: Record<string, string> = {
+  aquarium: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=600&q=80',
+  'ice-rink': 'https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=600&q=80',
+  'vr-park': 'https://images.unsplash.com/photo-1593508512255-86ab42a8e620?auto=format&fit=crop&w=600&q=80',
+  kidzania: 'https://images.unsplash.com/photo-1596464716127-f2a82984de30?auto=format&fit=crop&w=600&q=80',
+  cinemas: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=600&q=80',
+  rainforest: 'https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=600&q=80'
+};
+
 // Register GSAP plugins
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
@@ -110,44 +119,53 @@ export const EntertainmentShowcase: React.FC = () => {
           {entertainmentAttractions.map((attraction, idx) => {
             return (
               <ScrollReveal key={attraction.id} delay={0.15}>
-                <div className="group rounded-lg bg-surface border border-gold/15 p-8 md:p-12 hover:border-gold/45 hover:shadow-[0_12px_40px_rgba(201,168,76,0.06)] transition-all duration-500">
-                  
-                  {/* Card Header with Icon & Category */}
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-6 border-b border-gold/10">
-                    <div className="flex items-center gap-4">
-                      <div className="p-3 bg-gold/10 rounded-full border border-gold/20 flex items-center justify-center">
-                        {getAttractionIcon(attraction.iconName)}
-                      </div>
-                      <div>
-                        <h4 className="text-xl md:text-2xl font-display font-semibold text-ivory group-hover:text-gold-light transition-colors duration-300">
-                          {attraction.name}
-                        </h4>
-                        <span className="text-[9px] uppercase tracking-widest text-text-secondary">
-                          Anchor Attraction &bull; {idx + 1}
-                        </span>
+                <div className="group rounded-lg border border-black/5 p-8 md:p-12 hover:border-gold/45 hover:shadow-[0_12px_40px_rgba(201,168,76,0.06)] transition-all duration-500 relative overflow-hidden min-h-[320px] flex flex-col justify-between">
+                  {/* Background Image */}
+                  <div
+                    className="absolute inset-0 bg-cover bg-center transition-transform duration-750 group-hover:scale-105 pointer-events-none"
+                    style={{ backgroundImage: `url(${ATTRACTION_IMAGES[attraction.id] || ''})` }}
+                  />
+
+                  {/* Dark Vignette Overlay for Typography Readability */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/60 to-slate-950/30 z-10 pointer-events-none" />
+
+                  <div className="z-20 relative">
+                    {/* Card Header with Icon & Category */}
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-6 border-b border-white/10">
+                      <div className="flex items-center gap-4">
+                        <div className="p-3 bg-gold/25 rounded-full border border-gold/45 flex items-center justify-center text-gold-light">
+                          {getAttractionIcon(attraction.iconName)}
+                        </div>
+                        <div>
+                          <h4 className="text-xl md:text-2xl font-display font-semibold text-white group-hover:text-gold-light transition-colors duration-300">
+                            {attraction.name}
+                          </h4>
+                          <span className="text-[9px] uppercase tracking-widest text-slate-300">
+                            Anchor Attraction &bull; {idx + 1}
+                          </span>
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  {/* High Impact Stat Box */}
-                  <div className="mb-6 p-4 rounded neu-inset text-center sm:text-left">
-                    <span className="block text-[9px] uppercase tracking-wider text-text-secondary mb-1">
-                      Key Performance Indicator
-                    </span>
-                    <span className="text-2xl font-display font-semibold text-gold-light gold-text-gradient">
-                      {attraction.keyStat}
-                    </span>
-                  </div>
+                    {/* High Impact Stat Box */}
+                    <div className="mb-6 p-4 rounded bg-black/45 border border-white/10 text-center sm:text-left">
+                      <span className="block text-[9px] uppercase tracking-wider text-slate-300 mb-1">
+                        Key Performance Indicator
+                      </span>
+                      <span className="text-2xl font-display font-semibold text-gold-light">
+                        {attraction.keyStat}
+                      </span>
+                    </div>
 
-                  {/* Editorial Hook & Description */}
-                  <p className="text-sm font-accent italic text-gold-light/95 leading-relaxed mb-4">
-                    &ldquo;{attraction.hook}&rdquo;
-                  </p>
-                  
-                  <p className="text-xs text-text-secondary leading-relaxed font-sans font-light">
-                    {attraction.description}
-                  </p>
-                  
+                    {/* Editorial Hook & Description */}
+                    <p className="text-sm font-accent italic text-gold-light/95 leading-relaxed mb-4">
+                      &ldquo;{attraction.hook}&rdquo;
+                    </p>
+                    
+                    <p className="text-xs text-slate-200 leading-relaxed font-sans font-light">
+                      {attraction.description}
+                    </p>
+                  </div>
                 </div>
               </ScrollReveal>
             );

@@ -8,6 +8,14 @@ import { useDeck } from '@/context/DeckContext';
 import { supabase } from '@/lib/supabase';
 import { FiUsers, FiCheckCircle, FiChevronRight, FiX, FiSend } from 'react-icons/fi';
 
+const VENUE_IMAGES: Record<string, string> = {
+  'grand-atrium': 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=600&q=80',
+  'fashion-catwalk': 'https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=600&q=80',
+  'fountain-plaza': 'https://images.unsplash.com/photo-1534008897995-27a23e859048?auto=format&fit=crop&w=600&q=80',
+  'ice-rink-event': 'https://images.unsplash.com/photo-1518063319789-7217e6706b04?auto=format&fit=crop&w=600&q=80',
+  'old-town-island': 'https://images.unsplash.com/photo-1582672060674-bc2bd808a8b5?auto=format&fit=crop&w=600&q=80'
+};
+
 export const EventsPlatform: React.FC = () => {
   const { brandName } = useDeck();
 
@@ -175,27 +183,37 @@ export const EventsPlatform: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
           {eventVenues.map((venue, idx) => (
             <ScrollReveal key={venue.id} delay={idx * 0.1}>
-              <div className="h-full rounded-lg bg-surface/50 p-8 border border-gold/10 hover:border-gold/35 hover:bg-surface hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
-                <div>
+              <div className="h-full rounded-lg border border-black/5 p-8 flex flex-col justify-between relative overflow-hidden group transition-all duration-500 hover:border-gold/50 shadow-sm min-h-[380px]">
+                {/* Clear Venue Background Image */}
+                <div
+                  className="absolute inset-0 bg-cover bg-center transition-transform duration-750 group-hover:scale-105 pointer-events-none"
+                  style={{ backgroundImage: `url(${VENUE_IMAGES[venue.id] || '/images/leasing_showroom.png'})` }}
+                />
+
+                {/* Dark Vignette Overlay for Typography Readability */}
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/50 to-slate-950/20 z-10 pointer-events-none" />
+
+                {/* Content Area */}
+                <div className="z-20">
                   {/* Card Header */}
-                  <div className="flex justify-between items-start mb-6">
-                    <h4 className="text-xl font-display font-semibold text-ivory group-hover:text-gold transition-colors duration-300">
+                  <div className="flex justify-between items-start mb-6 gap-2">
+                    <h4 className="text-xl font-display font-semibold text-white group-hover:text-gold-light transition-colors duration-300">
                       {venue.name}
                     </h4>
-                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-gold/10 border border-gold/20 text-[9px] uppercase tracking-widest text-gold font-semibold">
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-gold/25 border border-gold/45 text-[9px] uppercase tracking-widest text-gold-light font-semibold shrink-0">
                       <FiUsers size={10} />
                       {venue.capacity.toLocaleString()} Capacity
                     </span>
                   </div>
 
                   {/* Ideal For */}
-                  <div className="mb-6">
-                    <span className="block text-[9px] uppercase tracking-wider text-text-secondary mb-2 font-medium">
+                  <div className="mb-4">
+                    <span className="block text-[9px] uppercase tracking-wider text-slate-300 mb-2 font-medium">
                       Ideal Use Case
                     </span>
                     <div className="flex flex-wrap gap-1.5">
                       {venue.idealFor.slice(0, 2).map((use, uIdx) => (
-                        <span key={uIdx} className="text-[10px] font-sans px-2 py-0.5 rounded bg-white/5 border border-white/10 text-text-secondary font-light">
+                        <span key={uIdx} className="text-[10px] font-sans px-2.5 py-0.5 rounded bg-black/45 border border-white/10 text-slate-200 font-light">
                           {use}
                         </span>
                       ))}
@@ -203,13 +221,13 @@ export const EventsPlatform: React.FC = () => {
                   </div>
 
                   {/* Feature Lists */}
-                  <div className="space-y-2 mb-8">
-                    <span className="block text-[9px] uppercase tracking-wider text-text-secondary mb-2 font-medium">
+                  <div className="space-y-2">
+                    <span className="block text-[9px] uppercase tracking-wider text-slate-300 mb-2 font-medium">
                       Architectural Features
                     </span>
                     {venue.features.map((feat, fIdx) => (
-                      <div key={fIdx} className="flex items-center gap-2 text-xs text-text-secondary font-sans font-light">
-                        <FiCheckCircle className="text-gold flex-shrink-0" size={12} />
+                      <div key={fIdx} className="flex items-center gap-2 text-xs text-slate-300 font-sans font-light">
+                        <FiCheckCircle className="text-gold-light flex-shrink-0" size={12} />
                         <span>{feat}</span>
                       </div>
                     ))}
@@ -218,7 +236,7 @@ export const EventsPlatform: React.FC = () => {
 
                 <button
                   onClick={() => handleOpenBooking(venue.name)}
-                  className="w-full mt-6 py-3 border border-gold/30 hover:border-gold hover:bg-gold/5 rounded text-[10px] font-sans font-semibold uppercase tracking-widest text-gold transition-all duration-300 focus-ring"
+                  className="w-full mt-8 py-3.5 bg-gold text-background border border-gold hover:bg-gold-light hover:border-gold-light rounded text-[10px] font-sans font-semibold uppercase tracking-widest transition-all duration-300 focus-ring z-20"
                 >
                   Enquire Availability
                 </button>

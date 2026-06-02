@@ -9,6 +9,22 @@ import { supabase } from '@/lib/supabase';
 import { cn } from '@/lib/utils';
 import { FiCheck, FiSend, FiAward } from 'react-icons/fi';
 
+const SUITE_IMAGES: Record<string, string> = {
+  platinum: 'https://images.unsplash.com/photo-1634973357973-f2ed255753e1?auto=format&fit=crop&w=600&q=80',
+  gold: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80',
+  silver: 'https://images.unsplash.com/photo-1618005198143-e528346d9a59?auto=format&fit=crop&w=600&q=80',
+  event: 'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=600&q=80'
+};
+
+const ACTIVATION_IMAGES: Record<string, string> = {
+  'Pop-Up Zone': '/images/premium_showroom.png', // AI Showroom
+  'Digital OOH': 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80', // Digital screen/billboard
+  'Social Integration': 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=600&q=80', // Social/smartphone
+  'In-Store Showcase': '/images/luxury_jewelry.png', // AI Luxury Jewelry
+  'Event Partnerships': 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=600&q=80', // Event Partnerships
+  'Sampling Campaigns': 'https://images.unsplash.com/photo-1556742044-3c52d6e88c62?auto=format&fit=crop&w=600&q=80' // Customer/Sampling
+};
+
 export const SponsorshipPlatform: React.FC = () => {
   const {
     brandName,
@@ -51,11 +67,11 @@ export const SponsorshipPlatform: React.FC = () => {
     try {
       const { error } = await supabase.from('sponsorship_enquiries').insert([
         {
-          package_tier: (sponsorshipTier || 'platinum').toUpperCase(),
+          package_tier: sponsorshipTier,
           brand_name: formData.brandName,
           contact_name: formData.contactName,
           email: formData.email,
-          message: formData.message,
+          message: `${formData.message}\n\n[Active Sponsorship Tier: ${sponsorshipTier.toUpperCase()}]`,
         }
       ]);
 
@@ -68,10 +84,9 @@ export const SponsorshipPlatform: React.FC = () => {
         email: '',
         message: ''
       });
-      setSponsorshipTier('');
       setTimeout(() => setStatus('idle'), 5000);
     } catch (err) {
-      console.error('Error submitting sponsorship inquiry:', err);
+      console.error('Error registering sponsorship inquiry:', err);
       setStatus('error');
       setTimeout(() => setStatus('idle'), 5000);
     }
@@ -80,9 +95,13 @@ export const SponsorshipPlatform: React.FC = () => {
   return (
     <section
       id="sponsorship"
-      className="relative w-full py-16 md:py-32 px-4 sm:px-6 md:px-12 bg-background border-t border-gold/10 overflow-hidden"
-      aria-label="Corporate Sponsorship Platform"
+      className="relative w-full py-16 md:py-32 px-4 sm:px-6 md:px-12 bg-transparent border-t border-white/50 overflow-hidden"
+      aria-label="Sponsorship & Brand Partnership Matrix"
     >
+      {/* Background Accents */}
+      <div className="absolute top-1/3 right-0 w-[450px] h-[450px] bg-gold/5 rounded-full filter blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-1/3 left-0 w-[450px] h-[450px] bg-crimson/5 rounded-full filter blur-[120px] pointer-events-none" />
+
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <SectionHeader
@@ -107,35 +126,44 @@ export const SponsorshipPlatform: React.FC = () => {
         </div>
 
         {/* Sponsorship Package Tiers */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-24 items-stretch">
-          {sponsorshipPackages.slice(0, 3).map((pkg, idx) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-24 items-stretch">
+          {sponsorshipPackages.map((pkg, idx) => (
             <ScrollReveal key={pkg.id} delay={idx * 0.1}>
-              <div className="h-full rounded-lg bg-surface/50 p-8 border border-gold/10 hover:border-gold/30 hover:bg-surface hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
-                <div>
+              <div className="h-full rounded-lg border border-black/5 p-6 flex flex-col justify-between relative overflow-hidden group transition-all duration-500 hover:border-gold/50 shadow-sm min-h-[460px]">
+                {/* Clear Background Image */}
+                <div
+                  className="absolute inset-0 bg-cover bg-center transition-transform duration-750 group-hover:scale-105 pointer-events-none"
+                  style={{ backgroundImage: `url(${SUITE_IMAGES[pkg.id] || ''})` }}
+                />
+
+                {/* Dark Vignette Overlay for Typography Readability */}
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/50 to-slate-950/20 z-10 pointer-events-none" />
+
+                <div className="z-20">
                   {/* Card Header */}
                   <div className="flex justify-between items-start mb-6">
-                    <span className="px-3 py-1 rounded bg-gold/10 border border-gold/25 text-[10px] uppercase tracking-widest text-gold font-bold">
+                    <span className="px-3 py-1 rounded bg-gold/25 border border-gold/45 text-[10px] uppercase tracking-widest text-gold-light font-bold">
                       {pkg.tier}
                     </span>
-                    <span className="text-[10px] text-text-secondary uppercase tracking-widest">
+                    <span className="text-[10px] text-slate-300 uppercase tracking-widest">
                       {pkg.duration}
                     </span>
                   </div>
 
-                  <h3 className="text-2xl font-display font-semibold text-ivory mb-2">
-                    {pkg.tier} Suite
+                  <h3 className="text-xl font-display font-semibold text-white mb-2">
+                    {pkg.tier} {pkg.id === 'event' ? '' : 'Suite'}
                   </h3>
                   
-                  <span className="block text-xl font-sans font-semibold text-gold-light tracking-tight mb-8">
+                  <span className="block text-lg font-sans font-semibold text-gold-light tracking-tight mb-8">
                     {pkg.price}
                   </span>
 
                   {/* Bullet Inclusions */}
-                  <ul className="space-y-3.5 mb-8">
+                  <ul className="space-y-3 mb-6">
                     {pkg.inclusions.map((inc, iIdx) => (
-                      <li key={iIdx} className="flex items-start gap-2.5 text-xs text-text-secondary font-sans font-light leading-relaxed">
-                        <FiCheck className="text-gold flex-shrink-0 mt-0.5" size={13} />
-                        <span>{inc}</span>
+                      <li key={iIdx} className="flex items-start gap-2 text-xs text-slate-200 font-sans font-light leading-relaxed">
+                        <FiCheck className="text-gold-light flex-shrink-0 mt-0.5" size={13} />
+                        <span className="line-clamp-4">{inc}</span>
                       </li>
                     ))}
                   </ul>
@@ -143,12 +171,12 @@ export const SponsorshipPlatform: React.FC = () => {
 
                 <button
                   onClick={() => {
-                    setSponsorshipTier(pkg.tier.toLowerCase() as 'platinum' | 'gold' | 'silver' | '');
+                    setSponsorshipTier(pkg.tier.toLowerCase() as 'platinum' | 'gold' | 'silver' | 'event' | '');
                     const el = document.getElementById('sponsorship-inquiry-form');
                     if (el) el.scrollIntoView({ behavior: 'smooth' });
                   }}
                   className={cn(
-                    "w-full mt-6 py-3.5 border rounded text-[10px] font-sans font-semibold uppercase tracking-widest transition-all duration-350 focus-ring",
+                    "w-full mt-6 py-3.5 border rounded text-[10px] font-sans font-semibold uppercase tracking-widest transition-all duration-350 focus-ring z-20",
                     sponsorshipTier === pkg.tier.toLowerCase()
                       ? "bg-gold text-background border-gold"
                       : "border-gold hover:bg-gold hover:text-background text-gold"
@@ -169,13 +197,23 @@ export const SponsorshipPlatform: React.FC = () => {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
             {activationTypes.map((act, idx) => (
               <ScrollReveal key={idx} delay={idx * 0.05}>
-                <div className="h-full rounded bg-surface/30 p-6 border border-gold/10 hover:border-gold/30 hover:bg-surface/50 text-center transition-all duration-300">
-                  <span className="block text-xs uppercase tracking-widest text-gold font-bold mb-2">
-                    {act.name}
-                  </span>
-                  <p className="text-[10px] text-text-secondary leading-relaxed font-sans font-light">
-                    {act.description}
-                  </p>
+                <div className="h-48 rounded border border-black/5 p-4 flex flex-col justify-end relative overflow-hidden group transition-all duration-500 hover:border-gold/50 shadow-sm text-left">
+                  {/* Background Image */}
+                  <div
+                    className="absolute inset-0 bg-cover bg-center transition-transform duration-750 group-hover:scale-105 pointer-events-none"
+                    style={{ backgroundImage: `url(${ACTIVATION_IMAGES[act.name] || ''})` }}
+                  />
+                  {/* Dark Vignette Overlay for Typography Readability */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/60 to-slate-950/20 z-10 pointer-events-none" />
+                  
+                  <div className="z-20 relative">
+                    <span className="block text-[11px] uppercase tracking-widest text-gold-light font-bold mb-1.5 group-hover:text-gold transition-colors duration-300">
+                      {act.name}
+                    </span>
+                    <p className="text-[9.5px] text-slate-300 leading-normal font-sans font-light line-clamp-4">
+                      {act.description}
+                    </p>
+                  </div>
                 </div>
               </ScrollReveal>
             ))}

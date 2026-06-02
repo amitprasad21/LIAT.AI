@@ -239,23 +239,48 @@ export const RetailExperience: React.FC = () => {
           </ScrollReveal>
         </div>
 
-        {/* Opportunity cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch mb-16">
-          {retailOpportunities.map((opp, idx) => (
-            <ScrollReveal key={idx} delay={idx * 0.1}>
-              <div className="h-full rounded-lg bg-surface/50 p-8 border border-gold/10 hover:border-gold/30 hover:bg-surface transition-all duration-300 flex flex-col">
-                <div className="p-3.5 bg-gold/15 rounded border border-gold/20 text-gold w-fit mb-6">
-                  {getOpportunityIcon(opp.title)}
+        {/* Split Grid: Opportunity cards on left, AI-generated Couture Showcase on right */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch mb-16">
+          {/* Left 2/3: Business Opportunities */}
+          <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6">
+            {retailOpportunities.map((opp, idx) => (
+              <ScrollReveal key={idx} delay={idx * 0.1}>
+                <div className="group h-full rounded-lg bg-surface/30 p-6 border border-gold/10 hover:border-gold/30 hover:bg-surface/50 transition-all duration-300 flex flex-col justify-between">
+                  <div>
+                    <div className="p-3.5 bg-gold/10 rounded border border-gold/15 text-gold w-fit mb-6">
+                      {getOpportunityIcon(opp.title)}
+                    </div>
+                    <h4 className="text-base font-display font-semibold text-ivory mb-2">
+                      {opp.title}
+                    </h4>
+                    <p className="text-xs text-text-secondary leading-relaxed font-sans font-light">
+                      {opp.description}
+                    </p>
+                  </div>
+                  <span className="text-[8.5px] uppercase tracking-widest text-gold mt-6 block font-semibold">
+                    Retail Hub &bull; Strategic Spec
+                  </span>
                 </div>
-                <h4 className="text-lg font-display font-medium text-ivory mb-3">
-                  {opp.title}
-                </h4>
-                <p className="text-sm text-text-secondary leading-relaxed font-sans font-light flex-grow">
-                  {opp.description}
-                </p>
+              </ScrollReveal>
+            ))}
+          </div>
+
+          {/* Right 1/3: AI-generated Couture Boutique Showcase */}
+          <div className="lg:col-span-4">
+            <ScrollReveal delay={0.15} className="rounded-lg overflow-hidden border border-gold/15 bg-surface h-full flex flex-col min-h-[260px]">
+              <div className="relative flex-1 h-full min-h-[260px] w-full">
+                <img
+                  src="/images/luxury_jewelry.png"
+                  alt="AI Haute Joaillerie Showcase"
+                  className="absolute inset-0 w-full h-full object-cover opacity-90 hover:scale-[1.03] transition-transform duration-700 ease-out"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
+                <span className="absolute bottom-4 left-4 text-[9px] uppercase tracking-[0.25em] text-white/85 font-sans font-bold">
+                  AI-Imagined Couture Showcase
+                </span>
               </div>
             </ScrollReveal>
-          ))}
+          </div>
         </div>
 
         {/* CTA scroll action */}
