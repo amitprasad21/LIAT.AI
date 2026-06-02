@@ -348,6 +348,19 @@ export const LeasingOpportunities: React.FC = () => {
               </h3>
             </div>
 
+            {/* AI-Generated Showroom Card */}
+            <ScrollReveal className="rounded-xl overflow-hidden border border-gold/15 mb-4 bg-surface h-40 relative shadow-sm">
+              <img
+                src="/images/leasing_showroom.png"
+                alt="Emaar Leasing Showroom"
+                className="absolute inset-0 w-full h-full object-cover opacity-90 hover:scale-[1.02] transition-transform duration-500 ease-out"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
+              <span className="absolute bottom-3 left-4 text-[8.5px] uppercase tracking-[0.25em] text-white/85 font-sans font-bold">
+                AI Showroom Concept &bull; Spatial Design
+              </span>
+            </ScrollReveal>
+
             <ScrollReveal className="rounded-xl bg-surface border border-slate-200/80 p-8 shadow-sm">
               <h3 className="font-display text-lg font-medium text-text-primary mb-6 text-center lg:text-left">
                 Register Leasing Candidacy

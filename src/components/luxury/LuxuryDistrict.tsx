@@ -30,40 +30,40 @@ export const LuxuryDistrict: React.FC = () => {
           </blockquote>
         </ScrollReveal>
 
-        {/* Two-Column Grid: Large Stat Callouts & Stacked highlights */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+        {/* Three-Column Grid: Large Stat Callouts, AI Image Showcase, and Highlights */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-stretch">
           
           {/* Left Column: Prestigious Stat Callout Box */}
-          <div className="lg:col-span-5 flex flex-col justify-center h-full">
-            <ScrollReveal className="bg-surface border border-gold/15 rounded-lg p-10 flex flex-col justify-between h-full hover:border-gold/30 transition-colors duration-500">
+          <div className="lg:col-span-4 flex flex-col">
+            <ScrollReveal className="bg-surface border border-gold/15 rounded-lg p-8 flex flex-col justify-between h-full hover:border-gold/30 transition-colors duration-500">
               <div>
                 <span className="text-xs uppercase tracking-[0.25em] text-gold font-medium block mb-6">
                   PRESTIGE BENCHMARK
                 </span>
                 
-                <h4 className="text-2xl md:text-3xl font-display font-medium text-ivory mb-4">
+                <h4 className="text-xl font-display font-medium text-ivory mb-4">
                   The Epicenter of High Fashion
                 </h4>
                 
-                <p className="text-sm text-text-secondary leading-relaxed font-sans font-light mb-8">
+                <p className="text-xs text-text-secondary leading-relaxed font-sans font-light mb-6">
                   Serving as the premier global home for flagship representations of the world's leading fashion syndicates. The high concentration of retail stores creates unparalleled brand gravity and customer conversions.
                 </p>
               </div>
 
-              <div className="border-t border-gold/10 pt-8 mt-4 space-y-6">
+              <div className="border-t border-gold/10 pt-6 mt-4 space-y-4">
                 <div>
-                  <span className="block text-[10px] uppercase tracking-widest text-text-secondary mb-1">
+                  <span className="block text-[9px] uppercase tracking-widest text-text-secondary mb-1">
                     Luxury Concentration
                   </span>
-                  <span className="text-2xl font-display font-semibold text-gold-light">
+                  <span className="text-xl font-display font-semibold text-gold-light">
                     {luxuryStats.brandsCount}
                   </span>
                 </div>
                 <div>
-                  <span className="block text-[10px] uppercase tracking-widest text-text-secondary mb-1">
+                  <span className="block text-[9px] uppercase tracking-widest text-text-secondary mb-1">
                     Financial Performance
                   </span>
-                  <span className="text-2xl font-display font-semibold text-gold-light">
+                  <span className="text-xl font-display font-semibold text-gold-light">
                     {luxuryStats.annualRevenue}
                   </span>
                 </div>
@@ -71,8 +71,25 @@ export const LuxuryDistrict: React.FC = () => {
             </ScrollReveal>
           </div>
 
+          {/* Middle Column: AI-generated High Fashion Avenue Showcase */}
+          <div className="lg:col-span-4 flex flex-col">
+            <ScrollReveal className="rounded-lg overflow-hidden border border-gold/15 bg-surface h-full flex flex-col min-h-[280px]">
+              <div className="relative flex-1 h-full min-h-[280px] w-full">
+                <img
+                  src="/images/fashion_avenue_luxury.png"
+                  alt="Fashion Avenue Luxury Corridor"
+                  className="absolute inset-0 w-full h-full object-cover opacity-90 hover:scale-[1.03] transition-transform duration-700 ease-out"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
+                <span className="absolute bottom-4 left-4 text-[9px] uppercase tracking-[0.25em] text-white/85 font-sans font-bold">
+                  AI-Imagined Couture Corridor
+                </span>
+              </div>
+            </ScrollReveal>
+          </div>
+
           {/* Right Column: Stacked Editorial Highlights */}
-          <div className="lg:col-span-7 space-y-12">
+          <div className="lg:col-span-4 space-y-8 flex flex-col justify-between">
             {highlights.map((item, idx) => (
               <ScrollReveal key={idx} delay={idx * 0.15}>
                 <div className="group flex gap-8 pb-8 border-b border-gold/10 last:border-0 items-start">

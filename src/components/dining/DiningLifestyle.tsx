@@ -86,37 +86,58 @@ export const DiningLifestyle: React.FC = () => {
           </div>
         </ScrollReveal>
 
-        {/* 3 designated Dining precints feature columns */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {diningFeatures.map((feat, idx) => (
-            <ScrollReveal key={feat.id} delay={idx * 0.1}>
-              <div className="group h-full rounded-lg bg-surface/30 p-8 border border-gold/10 hover:border-gold/30 hover:bg-surface/50 transition-all duration-300 flex flex-col justify-between">
-                <div>
-                  {/* Large Stylized Number & Icon Row */}
-                  <div className="flex justify-between items-center mb-6">
-                    <span className="font-display text-3xl font-light text-gold/30 group-hover:text-gold transition-colors duration-300">
-                      {feat.number}
-                    </span>
-                    <div className="p-2.5 bg-gold/10 rounded text-gold border border-gold/15">
-                      {getFeatureIcon(feat.title)}
+        {/* Precinct Features and AI Image Split Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+          
+          {/* Left 2/3: 3 designated Dining precincts feature columns */}
+          <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-3 gap-4 lg:gap-6">
+            {diningFeatures.map((feat, idx) => (
+              <ScrollReveal key={feat.id} delay={idx * 0.1}>
+                <div className="group h-full rounded-lg bg-surface/30 p-6 border border-gold/10 hover:border-gold/30 hover:bg-surface/50 transition-all duration-300 flex flex-col justify-between">
+                  <div>
+                    {/* Large Stylized Number & Icon Row */}
+                    <div className="flex justify-between items-center mb-6">
+                      <span className="font-display text-3xl font-light text-gold/30 group-hover:text-gold transition-colors duration-300">
+                        {feat.number}
+                      </span>
+                      <div className="p-2 bg-gold/10 rounded text-gold border border-gold/15">
+                        {getFeatureIcon(feat.title)}
+                      </div>
                     </div>
+
+                    <h5 className="text-base font-display font-semibold text-ivory mb-2">
+                      {feat.title}
+                    </h5>
+                    
+                    <p className="text-xs text-text-secondary leading-relaxed font-sans font-light">
+                      {feat.description}
+                    </p>
                   </div>
 
-                  <h5 className="text-lg font-display font-semibold text-ivory mb-3">
-                    {feat.title}
-                  </h5>
-                  
-                  <p className="text-sm text-text-secondary leading-relaxed font-sans font-light">
-                    {feat.description}
-                  </p>
+                  <span className="text-[8.5px] uppercase tracking-widest text-gold mt-6 block font-semibold">
+                    Dining Hub &bull; Zone Spec
+                  </span>
                 </div>
+              </ScrollReveal>
+            ))}
+          </div>
 
-                <span className="text-[9px] uppercase tracking-widest text-gold mt-6 block font-semibold">
-                  Primary Dining Hub &bull; Zone Spec
+          {/* Right 1/3: AI-generated Waterfront Dining Showcase */}
+          <div className="lg:col-span-4">
+            <ScrollReveal delay={0.15} className="rounded-lg overflow-hidden border border-gold/15 bg-surface h-full flex flex-col min-h-[260px]">
+              <div className="relative flex-1 h-full min-h-[260px] w-full">
+                <img
+                  src="/images/waterfront_dining.png"
+                  alt="Waterfront Dining at Night"
+                  className="absolute inset-0 w-full h-full object-cover opacity-90 hover:scale-[1.03] transition-transform duration-700 ease-out"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
+                <span className="absolute bottom-4 left-4 text-[9px] uppercase tracking-[0.25em] text-white/85 font-sans font-bold">
+                  AI-Imagined Waterfront Vista
                 </span>
               </div>
             </ScrollReveal>
-          ))}
+          </div>
         </div>
 
       </div>
