@@ -6,6 +6,42 @@ import { ScrollReveal } from '@/components/animations/ScrollReveal';
 import { luxuryBrands, premiumBrands, anchorStores, retailOpportunities } from '@/data/retailBrands';
 import { FiChevronRight, FiMaximize2, FiShield, FiTrendingUp } from 'react-icons/fi';
 
+const BRAND_IMAGES: Record<string, string> = {
+  // Luxury
+  lv: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=600&q=80',
+  chanel: 'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=600&q=80',
+  gucci: 'https://images.unsplash.com/photo-1598532163257-ae3c6b2524b6?auto=format&fit=crop&w=600&q=80',
+  hermes: 'https://images.unsplash.com/photo-1608748010899-18f300247112?auto=format&fit=crop&w=600&q=80',
+  dior: 'https://images.unsplash.com/photo-1590156546746-c237022798aa?auto=format&fit=crop&w=600&q=80',
+  cartier: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=600&q=80',
+  rolex: 'https://images.unsplash.com/photo-1622434641406-a158123450f9?auto=format&fit=crop&w=600&q=80',
+  tiffany: 'https://images.unsplash.com/photo-1603561591411-07134e71a2a9?auto=format&fit=crop&w=600&q=80',
+  prada: 'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=600&q=80',
+  burberry: 'https://images.unsplash.com/photo-1548624149-f7b3e5a332ff?auto=format&fit=crop&w=600&q=80',
+  versace: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=600&q=80',
+  bulgari: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=600&q=80',
+  vancleef: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=600&q=80',
+  bottega: 'https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=600&q=80',
+  ysl: 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=600&q=80',
+
+  // Premium
+  apple: 'https://images.unsplash.com/photo-1563206767-5b18f218e8de?auto=format&fit=crop&w=600&q=80',
+  samsung: 'https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?auto=format&fit=crop&w=600&q=80',
+  zara: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=600&q=80',
+  hm: 'https://images.unsplash.com/photo-1567401893930-7be0b1786c30?auto=format&fit=crop&w=600&q=80',
+  uniqlo: 'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=600&q=80',
+  sephora: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=600&q=80',
+  mac: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=600&q=80',
+  jomalone: 'https://images.unsplash.com/photo-1547887537-6158d64c35b3?auto=format&fit=crop&w=600&q=80',
+  dyson: 'https://images.unsplash.com/photo-1527515637462-c97d3113907d?auto=format&fit=crop&w=600&q=80',
+  lego: 'https://images.unsplash.com/photo-1585366119957-e9730b6d0f60?auto=format&fit=crop&w=600&q=80',
+
+  // Anchors
+  lafayette: 'https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?auto=format&fit=crop&w=600&q=80',
+  bloomingdales: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=600&q=80',
+  marks: 'https://images.unsplash.com/photo-1607344645866-009c320b5ab8?auto=format&fit=crop&w=600&q=80'
+};
+
 export const RetailExperience: React.FC = () => {
 
   const handleScrollToLeasing = () => {
@@ -18,18 +54,8 @@ export const RetailExperience: React.FC = () => {
     return <FiTrendingUp size={22} />;
   };
 
-  const getBrandBgImage = (brand: { id: string; tier: string }) => {
-    if (brand.tier === 'luxury') {
-      const jewelryIds = ['cartier', 'rolex', 'tiffany', 'bulgari', 'vancleef'];
-      if (jewelryIds.includes(brand.id)) {
-        return '/images/luxury_jewelry.png';
-      }
-      return '/images/fashion_avenue_luxury.png';
-    }
-    if (brand.tier === 'premium') {
-      return '/images/premium_showroom.png';
-    }
-    return '/images/leasing_showroom.png';
+  const getBrandBgImage = (brand: { id: string }) => {
+    return BRAND_IMAGES[brand.id] || '/images/leasing_showroom.png';
   };
 
   return (
@@ -60,42 +86,42 @@ export const RetailExperience: React.FC = () => {
               {luxuryBrands.map((brand) => (
                 <div
                   key={brand.id}
-                  className="flex-shrink-0 w-64 h-40 snap-start rounded bg-surface border border-gold/15 p-6 flex flex-col justify-between relative overflow-hidden group transition-all duration-500 hover:border-gold/45"
-                  style={{
-                    boxShadow: 'inset 3px 3px 6px rgba(163, 177, 198, 0.25), inset -3px -3px 6px rgba(255, 255, 255, 0.7)'
-                  }}
+                  className="flex-shrink-0 w-64 h-40 snap-start rounded border border-black/5 p-6 flex flex-col justify-between relative overflow-hidden group transition-all duration-500 hover:border-gold/50 shadow-sm"
                 >
                   {/* Category Background Image */}
                   <div
-                    className="absolute inset-0 bg-cover bg-center opacity-[0.06] group-hover:opacity-[0.12] transition-opacity duration-500 pointer-events-none"
+                    className="absolute inset-0 bg-cover bg-center transition-transform duration-750 group-hover:scale-105 pointer-events-none"
                     style={{ backgroundImage: `url(${getBrandBgImage(brand)})` }}
                   />
 
+                  {/* Dark Vignette Overlay for Typography Readability */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/45 to-slate-950/10 z-10 pointer-events-none" />
+
                   {/* Brand Color Ambient Glow */}
                   <div
-                    className="absolute inset-0 opacity-10 group-hover:opacity-15 transition-opacity duration-500"
+                    className="absolute inset-0 opacity-15 group-hover:opacity-20 transition-opacity duration-500 z-15 pointer-events-none"
                     style={{ backgroundColor: brand.logoColor }}
                   />
 
                   {/* Brand Display Header */}
-                  <span className="font-display text-xl tracking-widest text-ivory group-hover:text-gold transition-colors duration-300">
+                  <span className="font-display text-lg tracking-widest text-white z-20 group-hover:text-gold-light transition-colors duration-300">
                     {brand.name}
                   </span>
 
                   {/* Dynamic Hover Spec Reveal */}
-                  <div className="absolute inset-0 bg-surface/90 backdrop-blur-md flex flex-col justify-center p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]">
-                    <span className="text-[10px] uppercase tracking-wider text-gold font-bold mb-1">
+                  <div className="absolute inset-0 bg-slate-950/95 backdrop-blur-md flex flex-col justify-center p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] z-30 text-white">
+                    <span className="text-[10px] uppercase tracking-wider text-gold-light font-bold mb-1">
                       {brand.category}
                     </span>
-                    <span className="text-xs text-text-secondary mb-3">
+                    <span className="text-xs text-slate-300 mb-3">
                       Flagship Footprint
                     </span>
-                    <span className="text-sm font-display font-medium text-ivory">
+                    <span className="text-sm font-display font-medium text-white">
                       {brand.storeSize}
                     </span>
                   </div>
 
-                  <span className="text-[9px] uppercase tracking-widest text-text-secondary">
+                  <span className="text-[9px] uppercase tracking-widest text-slate-300 z-20 font-sans font-medium">
                     Luxury Anchor
                   </span>
                 </div>
@@ -117,41 +143,41 @@ export const RetailExperience: React.FC = () => {
               {premiumBrands.map((brand) => (
                 <div
                   key={brand.id}
-                  className="flex-shrink-0 w-64 h-40 snap-start rounded bg-surface border border-gold/15 p-6 flex flex-col justify-between relative overflow-hidden group transition-all duration-500 hover:border-gold/45"
-                  style={{
-                    boxShadow: 'inset 3px 3px 6px rgba(163, 177, 198, 0.25), inset -3px -3px 6px rgba(255, 255, 255, 0.7)'
-                  }}
+                  className="flex-shrink-0 w-64 h-40 snap-start rounded border border-black/5 p-6 flex flex-col justify-between relative overflow-hidden group transition-all duration-500 hover:border-gold/50 shadow-sm"
                 >
                   {/* Category Background Image */}
                   <div
-                    className="absolute inset-0 bg-cover bg-center opacity-[0.06] group-hover:opacity-[0.12] transition-opacity duration-500 pointer-events-none"
+                    className="absolute inset-0 bg-cover bg-center transition-transform duration-750 group-hover:scale-105 pointer-events-none"
                     style={{ backgroundImage: `url(${getBrandBgImage(brand)})` }}
                   />
 
+                  {/* Dark Vignette Overlay for Typography Readability */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/45 to-slate-950/10 z-10 pointer-events-none" />
+
                   {/* Brand Color Ambient Glow */}
                   <div
-                    className="absolute inset-0 opacity-10 group-hover:opacity-15 transition-opacity duration-500"
+                    className="absolute inset-0 opacity-15 group-hover:opacity-20 transition-opacity duration-500 z-15 pointer-events-none"
                     style={{ backgroundColor: brand.logoColor }}
                   />
 
-                  <span className="font-display text-xl tracking-wider text-ivory group-hover:text-gold transition-colors duration-300">
+                  <span className="font-display text-lg tracking-widest text-white z-20 group-hover:text-gold-light transition-colors duration-300">
                     {brand.name}
                   </span>
 
                   {/* Dynamic Hover Spec Reveal */}
-                  <div className="absolute inset-0 bg-surface/90 backdrop-blur-md flex flex-col justify-center p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]">
-                    <span className="text-[10px] uppercase tracking-wider text-gold font-bold mb-1">
+                  <div className="absolute inset-0 bg-slate-950/95 backdrop-blur-md flex flex-col justify-center p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] z-30 text-white">
+                    <span className="text-[10px] uppercase tracking-wider text-gold-light font-bold mb-1">
                       {brand.category}
                     </span>
-                    <span className="text-xs text-text-secondary mb-3">
+                    <span className="text-xs text-slate-300 mb-3">
                       Premium Layout
                     </span>
-                    <span className="text-sm font-display font-medium text-ivory">
+                    <span className="text-sm font-display font-medium text-white">
                       {brand.storeSize}
                     </span>
                   </div>
 
-                  <span className="text-[9px] uppercase tracking-widest text-text-secondary">
+                  <span className="text-[9px] uppercase tracking-widest text-slate-300 z-20 font-sans font-medium">
                     Premium Category
                   </span>
                 </div>
@@ -170,34 +196,37 @@ export const RetailExperience: React.FC = () => {
               {anchorStores.map((brand) => (
                 <div
                   key={brand.id}
-                  className="rounded bg-surface border border-gold/15 p-8 flex flex-col justify-between h-48 relative overflow-hidden group transition-all duration-500 hover:border-gold/40 hover:-translate-y-1"
+                  className="rounded border border-black/5 p-8 flex flex-col justify-between h-48 relative overflow-hidden group transition-all duration-500 hover:border-gold/40 hover:-translate-y-1 shadow-sm"
                 >
                   {/* Category Background Image */}
                   <div
-                    className="absolute inset-0 bg-cover bg-center opacity-[0.05] group-hover:opacity-[0.1] transition-opacity duration-500 pointer-events-none"
-                    style={{ backgroundImage: `url(/images/leasing_showroom.png)` }}
+                    className="absolute inset-0 bg-cover bg-center transition-transform duration-750 group-hover:scale-105 pointer-events-none"
+                    style={{ backgroundImage: `url(${getBrandBgImage(brand)})` }}
                   />
+
+                  {/* Dark Vignette Overlay for Typography Readability */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/45 to-slate-950/10 z-10 pointer-events-none" />
 
                   {/* Brand Color Ambient Glow */}
                   <div
-                    className="absolute inset-0 opacity-5 group-hover:opacity-10 transition-opacity duration-500"
+                    className="absolute inset-0 opacity-15 group-hover:opacity-20 transition-opacity duration-500 z-15 pointer-events-none"
                     style={{ backgroundColor: brand.logoColor }}
                   />
                   
-                  <div>
-                    <span className="inline-block px-2.5 py-1 rounded bg-gold/10 border border-gold/20 text-[9px] uppercase tracking-widest text-gold mb-4">
+                  <div className="z-20">
+                    <span className="inline-block px-2.5 py-1 rounded bg-gold/20 border border-gold/40 text-[9px] uppercase tracking-widest text-gold-light mb-4 font-semibold">
                       Mega Anchor
                     </span>
-                    <h4 className="font-display text-2xl font-semibold tracking-wide text-ivory mb-2 group-hover:text-gold-light transition-colors duration-300">
+                    <h4 className="font-display text-2xl font-semibold tracking-wide text-white mb-2 group-hover:text-gold-light transition-colors duration-300">
                       {brand.name}
                     </h4>
-                    <p className="text-xs text-text-secondary font-sans font-light">
+                    <p className="text-xs text-slate-300 font-sans font-light">
                       {brand.category}
                     </p>
                   </div>
 
-                  <div className="flex items-baseline justify-between mt-6">
-                    <span className="text-[10px] uppercase tracking-widest text-text-secondary">
+                  <div className="flex items-baseline justify-between mt-6 z-20">
+                    <span className="text-[10px] uppercase tracking-widest text-slate-300">
                       Footprint Size
                     </span>
                     <span className="text-sm font-sans font-semibold text-gold-light">
