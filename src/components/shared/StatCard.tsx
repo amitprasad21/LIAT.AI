@@ -31,13 +31,18 @@ export const StatCard: React.FC<StatCardProps> = ({
 
         <div>
           {image && (
-            <div className="h-32 w-full rounded-md overflow-hidden relative border border-slate-200/50 mb-4 shadow-sm shrink-0">
+            <div className="h-32 w-full rounded-md overflow-hidden relative border border-gold/20 mb-4 shadow-inner shrink-0 group-hover:border-gold/40 transition-colors duration-300">
               <img
                 src={image}
                 alt={label}
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 pointer-events-none"
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 pointer-events-none sepia-[0.2] saturate-[0.9] contrast-[1.05] brightness-[0.85]"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/20 to-transparent pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/50 via-transparent to-gold/10 pointer-events-none" />
+              
+              {/* Floating Glassmorphic Tag */}
+              <span className="absolute top-2 right-2 inline-flex items-center px-1.5 py-0.5 rounded bg-slate-950/60 backdrop-blur-sm border border-gold/30 text-[7px] uppercase tracking-widest text-gold-light font-bold">
+                AI Spec Render
+              </span>
             </div>
           )}
 
