@@ -1,11 +1,10 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { ScrollReveal } from '@/components/animations/ScrollReveal';
 import { useSearchParams } from 'next/navigation';
 import { useDeck } from '@/context/DeckContext';
-import { cn } from '@/lib/utils';
 import { FiHome, FiAward, FiCalendar, FiSend, FiFileText, FiCheckSquare, FiSquare } from 'react-icons/fi';
 
 export const CTASystem: React.FC = () => {
@@ -14,7 +13,6 @@ export const CTASystem: React.FC = () => {
 
   const {
     brandName,
-    brandCategory,
     selectedZone,
     selectedSpaceSqft,
     leaseDurationYears,
@@ -25,48 +23,39 @@ export const CTASystem: React.FC = () => {
     setLoiAgreed
   } = useDeck();
 
-  const [showStickyBar, setShowStickyBar] = useState(false);
-  const [selectedIntent, setSelectedIntent] = useState<'lease' | 'sponsor' | 'venue'>('lease');
+  const [selectedIntent, setSelectedIntent] = useState<'lease' | 'sponsor' | 'venue'>(() => {
+    if (intentParam === 'lease' || intentParam === 'sponsor' || intentParam === 'venue') {
+      return intentParam;
+    }
+    return 'lease';
+  });
+
+  const [prevIntentParam, setPrevIntentParam] = useState<string | null>(intentParam);
+  const [prevBrandName, setPrevBrandName] = useState<string>(brandName);
   
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    company: '',
+    company: brandName || '',
     message: ''
   });
   
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
-  // Pre-select objective tier based on search params intent coordinates
-  useEffect(() => {
+  // Adjust state when query param or context updates during render
+  if (intentParam !== prevIntentParam) {
+    setPrevIntentParam(intentParam);
     if (intentParam === 'lease' || intentParam === 'sponsor' || intentParam === 'venue') {
       setSelectedIntent(intentParam);
     }
-  }, [intentParam]);
+  }
 
-  // Synchronize brandName into the form state on change
-  useEffect(() => {
+  if (brandName !== prevBrandName) {
+    setPrevBrandName(brandName);
     if (brandName) {
       setFormData(prev => ({ ...prev, company: brandName }));
     }
-  }, [brandName]);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const scrollPct = (window.scrollY / scrollHeight) * 100;
-      
-      // Show sticky bar after 30% scroll and hide near the very bottom footer
-      if (scrollPct > 30 && scrollPct < 90) {
-        setShowStickyBar(true);
-      } else {
-        setShowStickyBar(false);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }
 
   const handleScrollTo = (targetId: string) => {
     const element = document.getElementById(targetId);
@@ -186,7 +175,7 @@ ${formData.message || 'No additional message provided.'}
               <span className="gold-text-gradient font-bold">Our Stage.</span>
             </h2>
             <p className="text-sm text-text-secondary leading-relaxed max-w-xl mx-auto font-sans font-light">
-              Do not simply pitch. Elevate. Join the world's most high-performance lifestyle environment and command global consumer attention.
+              Do not simply pitch. Elevate. Join the world&apos;s most high-performance lifestyle environment and command global consumer attention.
             </p>
           </ScrollReveal>
 
@@ -410,7 +399,7 @@ ${formData.message || 'No additional message provided.'}
                         id="contact-type-intent"
                         name="selectedIntent"
                         value={selectedIntent}
-                        onChange={(e) => setSelectedIntent(e.target.value as any)}
+                        onChange={(e) => setSelectedIntent(e.target.value as 'lease' | 'sponsor' | 'venue')}
                         className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200/80 rounded text-xs text-text-primary focus:border-gold transition-all duration-300 focus-ring"
                       >
                         <option value="lease">Lease Space / Permanent Retail</option>

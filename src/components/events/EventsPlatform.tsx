@@ -1,36 +1,39 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { SectionHeader } from '@/components/shared/SectionHeader';
 import { ScrollReveal } from '@/components/animations/ScrollReveal';
 import { eventVenues, pastEvents } from '@/data/eventsData';
 import { useDeck } from '@/context/DeckContext';
 import { supabase } from '@/lib/supabase';
-import { cn } from '@/lib/utils';
-import { FiUsers, FiCheckCircle, FiChevronRight, FiX, FiCalendar, FiSend } from 'react-icons/fi';
+import { FiUsers, FiCheckCircle, FiChevronRight, FiX, FiSend } from 'react-icons/fi';
 
 export const EventsPlatform: React.FC = () => {
   const { brandName } = useDeck();
 
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedVenue, setSelectedVenue] = useState('Grand Atrium');
+  
   const [formData, setFormData] = useState({
     eventType: 'Product Launch',
     expectedAttendance: '500',
     name: '',
-    company: '',
+    company: brandName || '',
     email: '',
     phone: '',
     eventDate: ''
   });
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
-  // Pre-fill company name from global context
-  useEffect(() => {
-    if (brandName && !formData.company) {
+  const [prevBrandName, setPrevBrandName] = useState(brandName);
+
+  // Pre-fill company name from global context on post-mount changes
+  if (brandName !== prevBrandName) {
+    setPrevBrandName(brandName);
+    if (brandName) {
       setFormData(prev => ({ ...prev, company: brandName }));
     }
-  }, [brandName, formData.company]);
+  }
 
   // Find max capacity for percentage scaling in CSS bar charts
   const maxCapacity = Math.max(...eventVenues.map((v) => v.capacity));

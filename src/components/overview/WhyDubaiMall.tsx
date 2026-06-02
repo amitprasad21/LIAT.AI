@@ -243,7 +243,7 @@ export const WhyDubaiMall: React.FC = () => {
               CINEMATIC PRESENTATION
             </span>
             <h3 className="text-xl md:text-2xl font-display font-semibold text-ivory text-center mb-6">
-              Downtown Dubai: The World's Premier Lifestyle Destination
+              Downtown Dubai: The World&apos;s Premier Lifestyle Destination
             </h3>
             
             {/* Custom Premium Light Video Frame */}

@@ -4,7 +4,7 @@ import React from 'react';
 import { SectionHeader } from '@/components/shared/SectionHeader';
 import { ScrollReveal } from '@/components/animations/ScrollReveal';
 import { venueShowcaseData } from '@/data/venueData';
-import { FiUsers, FiLayers, FiCompass } from 'react-icons/fi';
+import { FiUsers, FiCompass } from 'react-icons/fi';
 
 export const VenueShowcase: React.FC = () => {
 

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { SectionHeader } from '@/components/shared/SectionHeader';
 import { ScrollReveal } from '@/components/animations/ScrollReveal';
 import { useDeck } from '@/context/DeckContext';
@@ -12,25 +12,27 @@ import { FiCheck, FiSend, FiAward } from 'react-icons/fi';
 export const SponsorshipPlatform: React.FC = () => {
   const {
     brandName,
-    setBrandName,
     sponsorshipTier,
     setSponsorshipTier
   } = useDeck();
 
   const [formData, setFormData] = useState({
-    brandName: '',
+    brandName: brandName || '',
     contactName: '',
     email: '',
     message: ''
   });
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
+  const [prevBrandName, setPrevBrandName] = useState(brandName);
+
   // Sync brandName into state when loaded from gateway/leasing sandbox
-  useEffect(() => {
-    if (brandName && !formData.brandName) {
+  if (brandName !== prevBrandName) {
+    setPrevBrandName(brandName);
+    if (brandName) {
       setFormData(prev => ({ ...prev, brandName }));
     }
-  }, [brandName, formData.brandName]);
+  }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -141,7 +143,7 @@ export const SponsorshipPlatform: React.FC = () => {
 
                 <button
                   onClick={() => {
-                    setSponsorshipTier(pkg.tier.toLowerCase() as any);
+                    setSponsorshipTier(pkg.tier.toLowerCase() as 'platinum' | 'gold' | 'silver' | '');
                     const el = document.getElementById('sponsorship-inquiry-form');
                     if (el) el.scrollIntoView({ behavior: 'smooth' });
                   }}

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { useDeck } from '@/context/DeckContext';
@@ -134,7 +134,6 @@ const SPEAKER_NOTES: Record<string, { title: string; notes: string[] }> = {
 export const InteractiveDeck: React.FC = () => {
   const [activeSlide, setActiveSlide] = useState<number>(-1); // -1 represents the Gateway Entrance
   const [direction, setDirection] = useState<number>(1);
-  const [intent, setIntent] = useState<string | null>(null);
 
   // Presenter Mode bindings from Global Context
   const {
@@ -185,7 +184,7 @@ export const InteractiveDeck: React.FC = () => {
   }, []);
 
   // Sync state transitions to address bar hash
-  const navigateToSlide = (index: number) => {
+  const navigateToSlide = useCallback((index: number) => {
     setDirection(index > activeSlide ? 1 : -1);
     if (index === -1) {
       window.location.hash = '';
@@ -194,7 +193,7 @@ export const InteractiveDeck: React.FC = () => {
       window.location.hash = SLIDES[index].id;
       setActiveSlide(index);
     }
-  };
+  }, [activeSlide]);
 
   // Keyboard navigation listener (left/right arrow keys & presenter hotkeys)
   useEffect(() => {
@@ -241,11 +240,9 @@ export const InteractiveDeck: React.FC = () => {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [activeSlide, setIsPresenterMode, setShowPresenterHUD]);
+  }, [activeSlide, setIsPresenterMode, setShowPresenterHUD, navigateToSlide]);
 
   const selectIntentAndNavigate = (selectedIntent: string, targetSlideId: string) => {
-    setIntent(selectedIntent);
-    
     // Set matching context variables dynamically based on gateway click
     if (selectedIntent === 'leasing') {
       setBrandCategory('luxury-fashion');
@@ -372,7 +369,7 @@ export const InteractiveDeck: React.FC = () => {
                 The Dubai Mall
               </h1>
               <p className="text-sm sm:text-base md:text-lg font-sans font-light text-text-secondary max-w-2xl mx-auto leading-relaxed mb-16">
-                Secure the commercial address of the world's most visited retail and lifestyle destination. Navigate directly to your business objective below.
+                Secure the commercial address of the world&apos;s most visited retail and lifestyle destination. Navigate directly to your business objective below.
               </p>
 
               {/* Segmented Gateway Intent Cards Grid */}

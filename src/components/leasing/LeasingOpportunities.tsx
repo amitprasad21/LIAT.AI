@@ -1,13 +1,13 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { SectionHeader } from '@/components/shared/SectionHeader';
 import { ScrollReveal } from '@/components/animations/ScrollReveal';
 import { useDeck, ZONE_METRICS } from '@/context/DeckContext';
 import { keyLeasingTerms } from '@/data/leasingData';
 import { supabase } from '@/lib/supabase';
 import { cn } from '@/lib/utils';
-import { FiCheck, FiSend, FiInfo, FiSliders, FiActivity, FiMapPin } from 'react-icons/fi';
+import { FiSend, FiInfo, FiSliders, FiActivity, FiMapPin } from 'react-icons/fi';
 
 export const LeasingOpportunities: React.FC = () => {
   const {
@@ -27,17 +27,20 @@ export const LeasingOpportunities: React.FC = () => {
 
   const [formData, setFormData] = useState({
     name: '',
-    company: '',
+    company: brandName || '',
     message: ''
   });
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
+  const [prevBrandName, setPrevBrandName] = useState(brandName);
+
   // Synchronize form text fields when brand name changes
-  useEffect(() => {
-    if (brandName && !formData.name) {
-      setFormData(prev => ({ ...prev, name: brandName }));
+  if (brandName !== prevBrandName) {
+    setPrevBrandName(brandName);
+    if (brandName) {
+      setFormData(prev => ({ ...prev, company: brandName }));
     }
-  }, [brandName, formData.name]);
+  }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;

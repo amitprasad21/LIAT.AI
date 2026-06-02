@@ -4,9 +4,10 @@ import { useState, useEffect, RefObject } from 'react';
 
 export const useIntersectionObserver = (
   elementRef: RefObject<Element | null>,
-  options: IntersectionObserverInit = { threshold: 0.1, rootMargin: '0px' }
+  options: IntersectionObserverInit = {}
 ) => {
   const [isIntersecting, setIsIntersecting] = useState(false);
+  const { threshold = 0.1, rootMargin = '0px', root = null } = options;
 
   useEffect(() => {
     const element = elementRef.current;
@@ -14,14 +15,14 @@ export const useIntersectionObserver = (
 
     const observer = new IntersectionObserver(([entry]) => {
       setIsIntersecting(entry.isIntersecting);
-    }, options);
+    }, { threshold, rootMargin, root });
 
     observer.observe(element);
 
     return () => {
       observer.unobserve(element);
     };
-  }, [elementRef, options.threshold, options.rootMargin, options.root]);
+  }, [elementRef, threshold, rootMargin, root]);
 
   return isIntersecting;
 };

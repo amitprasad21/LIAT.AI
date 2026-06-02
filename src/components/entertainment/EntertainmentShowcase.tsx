@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useRef, useState } from 'react';
-import { SectionHeader } from '@/components/shared/SectionHeader';
 import { ScrollReveal } from '@/components/animations/ScrollReveal';
 import { entertainmentAttractions } from '@/data/entertainmentData';
 import { useGSAP } from '@gsap/react';
@@ -109,7 +108,6 @@ export const EntertainmentShowcase: React.FC = () => {
         {/* Right Column: Alternating Cards that Scroll Beneath the Pinned Header */}
         <div className="lg:col-span-7 space-y-16">
           {entertainmentAttractions.map((attraction, idx) => {
-            const isEven = idx % 2 === 0;
             return (
               <ScrollReveal key={attraction.id} delay={0.15}>
                 <div className="group rounded-lg bg-surface border border-gold/15 p-8 md:p-12 hover:border-gold/45 hover:shadow-[0_12px_40px_rgba(201,168,76,0.06)] transition-all duration-500">
