@@ -6,6 +6,13 @@ import { ScrollReveal } from '@/components/animations/ScrollReveal';
 import { venueShowcaseData } from '@/data/venueData';
 import { FiUsers, FiCompass } from 'react-icons/fi';
 
+const VENUE_PHOTOS: Record<string, string> = {
+  atrium: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=600&q=80',
+  catwalk: '/images/runway_event_setup.png', // AI Runway Event Setup
+  rink: 'https://images.unsplash.com/photo-1518063319789-7217e6706b04?auto=format&fit=crop&w=600&q=80',
+  island: '/images/waterfront_venue_setup.png' // AI Waterfront Venue Setup
+};
+
 export const VenueShowcase: React.FC = () => {
 
   const handleScrollToVenueEnquiry = () => {
@@ -131,13 +138,25 @@ export const VenueShowcase: React.FC = () => {
                     </span>
                   </div>
 
-                  {/* Floor Plan Placeholder SVG */}
-                  <div className="mb-6 rounded-lg overflow-hidden border border-white/50 bg-[#D6E0F0] neu-inset">
-                    {renderSVGFloorPlan(venue.svgLayoutType)}
+                  {/* Visual Assets Side-by-Side: SVG Floor Plan and AI/Premium photo */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                    {/* Floor Plan SVG */}
+                    <div className="rounded-lg overflow-hidden border border-slate-200/50 bg-[#D6E0F0] neu-inset flex items-center justify-center p-2">
+                      {renderSVGFloorPlan(venue.svgLayoutType)}
+                    </div>
+                    {/* AI / Clear Photo */}
+                    <div className="rounded-lg overflow-hidden border border-slate-200/50 relative h-36 sm:h-auto min-h-[120px] shadow-sm">
+                      <img
+                        src={VENUE_PHOTOS[venue.svgLayoutType] || ''}
+                        alt={`${venue.name} Showcase`}
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 hover:scale-105 pointer-events-none"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
+                    </div>
                   </div>
 
                   {/* Description Paragraph */}
-                  <p className="text-sm text-text-secondary leading-relaxed font-sans font-light mb-6">
+                  <p className="text-xs text-text-secondary leading-relaxed font-sans font-light mb-6">
                     {venue.description}
                   </p>
 

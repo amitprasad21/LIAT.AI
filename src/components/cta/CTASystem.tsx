@@ -335,9 +335,25 @@ ${formData.message || 'No additional message provided.'}
 
               {/* Right Column: Inquiry Registration Form */}
               <div className="lg:col-span-6 flex flex-col justify-center">
-                <h3 className="font-display text-base font-medium text-text-primary mb-6 text-center lg:text-left">
+                <h3 className="font-display text-base font-medium text-text-primary mb-2 text-center lg:text-left">
                   Inquiry Registry
                 </h3>
+                <p className="text-[10px] text-text-secondary mb-6 text-center lg:text-left">
+                  Submit terms to synchronize with our corporate registry pipelines.
+                </p>
+
+                {/* AI-Generated Registry Hub Preview */}
+                <div className="rounded-xl overflow-hidden border border-slate-200/50 mb-6 bg-surface h-36 relative shadow-sm">
+                  <img
+                    src="/images/leasing_showroom.png"
+                    alt="Emaar Corporate Hub"
+                    className="absolute inset-0 w-full h-full object-cover opacity-95 hover:scale-[1.02] transition-transform duration-500 ease-out pointer-events-none"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
+                  <span className="absolute bottom-3 left-4 text-[8px] uppercase tracking-[0.25em] text-white/85 font-sans font-bold">
+                    AI-Imagined Emaar Corporate Showroom
+                  </span>
+                </div>
 
                 <form onSubmit={handleFormSubmit} className="space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

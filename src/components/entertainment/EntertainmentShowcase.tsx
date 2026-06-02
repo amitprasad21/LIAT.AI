@@ -96,7 +96,7 @@ export const EntertainmentShowcase: React.FC = () => {
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 relative">
         
         {/* Left Column: Pinned Section Header */}
-        <div ref={leftColRef} className="lg:col-span-5 lg:h-fit lg:sticky lg:top-32 self-start">
+        <div ref={leftColRef} className="lg:col-span-4 lg:h-fit lg:sticky lg:top-32 self-start">
           <span className="text-xs uppercase tracking-[0.3em] text-gold font-medium mb-3 block">
             05 / EXPERIENTIAL ANCHORS
           </span>
@@ -115,57 +115,60 @@ export const EntertainmentShowcase: React.FC = () => {
         </div>
 
         {/* Right Column: Alternating Cards that Scroll Beneath the Pinned Header */}
-        <div className="lg:col-span-7 space-y-16">
+        <div className="lg:col-span-8 space-y-12">
           {entertainmentAttractions.map((attraction, idx) => {
             return (
               <ScrollReveal key={attraction.id} delay={0.15}>
-                <div className="group rounded-lg border border-black/5 p-8 md:p-12 hover:border-gold/45 hover:shadow-[0_12px_40px_rgba(201,168,76,0.06)] transition-all duration-500 relative overflow-hidden min-h-[320px] flex flex-col justify-between">
-                  {/* Background Image */}
-                  <div
-                    className="absolute inset-0 bg-cover bg-center transition-transform duration-750 group-hover:scale-105 pointer-events-none"
-                    style={{ backgroundImage: `url(${ATTRACTION_IMAGES[attraction.id] || ''})` }}
-                  />
-
-                  {/* Dark Vignette Overlay for Typography Readability */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/60 to-slate-950/30 z-10 pointer-events-none" />
-
-                  <div className="z-20 relative">
-                    {/* Card Header with Icon & Category */}
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-6 border-b border-white/10">
-                      <div className="flex items-center gap-4">
-                        <div className="p-3 bg-gold/25 rounded-full border border-gold/45 flex items-center justify-center text-gold-light">
+                <div className="group rounded-2xl bg-surface border border-slate-200/60 p-6 md:p-8 hover:border-gold/30 hover:shadow-[0_15px_45px_rgba(30,58,138,0.04)] transition-all duration-500 flex flex-col md:flex-row gap-6 md:gap-8 items-stretch shadow-sm">
+                  
+                  {/* Left Side: Spec Content (2/3 width) */}
+                  <div className="flex-grow flex flex-col justify-between">
+                    <div>
+                      {/* Card Header with Icon & Title */}
+                      <div className="flex items-center gap-4 mb-4 pb-4 border-b border-slate-100">
+                        <div className="p-3 bg-gold/5 rounded-full border border-gold/15 flex items-center justify-center text-gold">
                           {getAttractionIcon(attraction.iconName)}
                         </div>
                         <div>
-                          <h4 className="text-xl md:text-2xl font-display font-semibold text-white group-hover:text-gold-light transition-colors duration-300">
+                          <h4 className="text-lg md:text-xl font-display font-semibold text-ivory group-hover:text-gold transition-colors duration-300">
                             {attraction.name}
                           </h4>
-                          <span className="text-[9px] uppercase tracking-widest text-slate-300">
+                          <span className="text-[9px] uppercase tracking-widest text-text-secondary">
                             Anchor Attraction &bull; {idx + 1}
                           </span>
                         </div>
                       </div>
+
+                      {/* Editorial Hook & Description */}
+                      <p className="text-xs font-accent italic text-gold/90 leading-relaxed mb-3">
+                        &ldquo;{attraction.hook}&rdquo;
+                      </p>
+                      <p className="text-xs text-text-secondary leading-relaxed font-sans font-light">
+                        {attraction.description}
+                      </p>
                     </div>
 
                     {/* High Impact Stat Box */}
-                    <div className="mb-6 p-4 rounded bg-black/45 border border-white/10 text-center sm:text-left">
-                      <span className="block text-[9px] uppercase tracking-wider text-slate-300 mb-1">
+                    <div className="mt-6 p-3 rounded-lg bg-slate-50 border border-slate-200/50 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                      <span className="text-[9px] uppercase tracking-wider text-text-secondary font-medium">
                         Key Performance Indicator
                       </span>
-                      <span className="text-2xl font-display font-semibold text-gold-light">
+                      <span className="text-sm font-display font-semibold text-gold">
                         {attraction.keyStat}
                       </span>
                     </div>
-
-                    {/* Editorial Hook & Description */}
-                    <p className="text-sm font-accent italic text-gold-light/95 leading-relaxed mb-4">
-                      &ldquo;{attraction.hook}&rdquo;
-                    </p>
-                    
-                    <p className="text-xs text-slate-200 leading-relaxed font-sans font-light">
-                      {attraction.description}
-                    </p>
                   </div>
+
+                  {/* Right Side: Framed Image (1/3 width, responsive size) */}
+                  <div className="w-full md:w-56 lg:w-64 h-48 md:h-auto rounded-xl overflow-hidden relative shrink-0 border border-slate-200/40 shadow-sm">
+                    <img
+                      src={ATTRACTION_IMAGES[attraction.id] || ''}
+                      alt={attraction.name}
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-750 group-hover:scale-105 pointer-events-none"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent pointer-events-none" />
+                  </div>
+
                 </div>
               </ScrollReveal>
             );

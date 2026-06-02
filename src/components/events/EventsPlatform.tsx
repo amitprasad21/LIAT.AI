@@ -180,66 +180,64 @@ export const EventsPlatform: React.FC = () => {
         </div>
 
         {/* Custom Venue specification Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+        <div className="flex flex-wrap justify-center gap-8 mb-16">
           {eventVenues.map((venue, idx) => (
-            <ScrollReveal key={venue.id} delay={idx * 0.1}>
-              <div className="h-full rounded-lg border border-black/5 p-8 flex flex-col justify-between relative overflow-hidden group transition-all duration-500 hover:border-gold/50 shadow-sm min-h-[380px]">
-                {/* Clear Venue Background Image */}
-                <div
-                  className="absolute inset-0 bg-cover bg-center transition-transform duration-750 group-hover:scale-105 pointer-events-none"
-                  style={{ backgroundImage: `url(${VENUE_IMAGES[venue.id] || '/images/leasing_showroom.png'})` }}
-                />
+            <ScrollReveal key={venue.id} delay={idx * 0.1} className="w-full md:w-[calc(50%-16px)] lg:w-[calc(33.333%-22px)] max-w-[380px]">
+              <div className="h-full rounded-2xl bg-surface border border-slate-200/60 overflow-hidden flex flex-col justify-between group transition-all duration-500 hover:border-gold/30 hover:shadow-[0_15px_45px_rgba(30,58,138,0.04)] min-h-[460px] shadow-sm">
+                
+                {/* Top Half: Venue Image Preview */}
+                <div className="h-48 relative overflow-hidden border-b border-slate-100 shrink-0">
+                  <img
+                    src={VENUE_IMAGES[venue.id] || '/images/leasing_showroom.png'}
+                    alt={venue.name}
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-750 group-hover:scale-105 pointer-events-none"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent pointer-events-none" />
+                  
+                  {/* Capacity badge overlaid on the image */}
+                  <span className="absolute top-4 right-4 inline-flex items-center gap-1 px-2.5 py-1 rounded bg-black/45 backdrop-blur-sm border border-white/10 text-[9px] uppercase tracking-widest text-white font-semibold">
+                    <FiUsers size={10} />
+                    {venue.capacity.toLocaleString()} Pax
+                  </span>
+                </div>
 
-                {/* Dark Vignette Overlay for Typography Readability */}
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/50 to-slate-950/20 z-10 pointer-events-none" />
-
-                {/* Content Area */}
-                <div className="z-20">
-                  {/* Card Header */}
-                  <div className="flex justify-between items-start mb-6 gap-2">
-                    <h4 className="text-xl font-display font-semibold text-white group-hover:text-gold-light transition-colors duration-300">
+                {/* Bottom Half: Spec Content */}
+                <div className="p-6 flex-grow flex flex-col justify-between">
+                  <div>
+                    <h4 className="text-lg font-display font-semibold text-ivory group-hover:text-gold transition-colors duration-300 mb-3">
                       {venue.name}
                     </h4>
-                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-gold/25 border border-gold/45 text-[9px] uppercase tracking-widest text-gold-light font-semibold shrink-0">
-                      <FiUsers size={10} />
-                      {venue.capacity.toLocaleString()} Capacity
-                    </span>
-                  </div>
 
-                  {/* Ideal For */}
-                  <div className="mb-4">
-                    <span className="block text-[9px] uppercase tracking-wider text-slate-300 mb-2 font-medium">
-                      Ideal Use Case
-                    </span>
-                    <div className="flex flex-wrap gap-1.5">
-                      {venue.idealFor.slice(0, 2).map((use, uIdx) => (
-                        <span key={uIdx} className="text-[10px] font-sans px-2.5 py-0.5 rounded bg-black/45 border border-white/10 text-slate-200 font-light">
-                          {use}
-                        </span>
+                    {/* Ideal Use Case */}
+                    <div className="mb-4">
+                      <div className="flex flex-wrap gap-1.5">
+                        {venue.idealFor.slice(0, 2).map((use, uIdx) => (
+                          <span key={uIdx} className="text-[9px] font-sans px-2 py-0.5 rounded bg-slate-50 border border-slate-200/50 text-text-secondary">
+                            {use}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Features List */}
+                    <div className="space-y-1.5">
+                      {venue.features.map((feat, fIdx) => (
+                        <div key={fIdx} className="flex items-center gap-2 text-xs text-text-secondary font-sans font-light">
+                          <FiCheckCircle className="text-gold flex-shrink-0" size={12} />
+                          <span>{feat}</span>
+                        </div>
                       ))}
                     </div>
                   </div>
 
-                  {/* Feature Lists */}
-                  <div className="space-y-2">
-                    <span className="block text-[9px] uppercase tracking-wider text-slate-300 mb-2 font-medium">
-                      Architectural Features
-                    </span>
-                    {venue.features.map((feat, fIdx) => (
-                      <div key={fIdx} className="flex items-center gap-2 text-xs text-slate-300 font-sans font-light">
-                        <FiCheckCircle className="text-gold-light flex-shrink-0" size={12} />
-                        <span>{feat}</span>
-                      </div>
-                    ))}
-                  </div>
+                  <button
+                    onClick={() => handleOpenBooking(venue.name)}
+                    className="w-full mt-6 py-2.5 bg-gold/5 border border-gold/15 text-gold hover:bg-gold hover:text-background rounded text-[9px] font-sans font-bold uppercase tracking-widest transition-all duration-350 focus-ring"
+                  >
+                    Enquire Availability
+                  </button>
                 </div>
 
-                <button
-                  onClick={() => handleOpenBooking(venue.name)}
-                  className="w-full mt-8 py-3.5 bg-gold text-background border border-gold hover:bg-gold-light hover:border-gold-light rounded text-[10px] font-sans font-semibold uppercase tracking-widest transition-all duration-300 focus-ring z-20"
-                >
-                  Enquire Availability
-                </button>
               </div>
             </ScrollReveal>
           ))}
