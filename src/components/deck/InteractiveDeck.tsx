@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { useDeck } from '@/context/DeckContext';
@@ -147,12 +147,14 @@ export const InteractiveDeck: React.FC = () => {
   } = useDeck();
 
   // Mouse coordinate tracking for virtual laser pointer
-  const [mousePos, setMousePos] = useState({ x: -100, y: -100 });
+  const laserRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!isPresenterMode) return;
     const handleMouseMove = (e: MouseEvent) => {
-      setMousePos({ x: e.clientX, y: e.clientY });
+      if (laserRef.current) {
+        laserRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%)`;
+      }
     };
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
@@ -288,8 +290,9 @@ export const InteractiveDeck: React.FC = () => {
       {/* 🔴 Virtual Laser Pointer Overlay */}
       {isPresenterMode && (
         <div 
-          className="fixed pointer-events-none w-5 h-5 rounded-full bg-red-600/90 shadow-[0_0_15px_#ef4444,0_0_30px_#ef4444] z-[9999] top-0 left-0"
-          style={{ transform: `translate3d(${mousePos.x}px, ${mousePos.y}px, 0) translate(-50%, -50%)` }}
+          ref={laserRef}
+          className="fixed pointer-events-none w-5 h-5 rounded-full bg-red-600/90 shadow-[0_0_15px_#ef4444,0_0_30px_#ef4444] z-[9999] top-0 left-0 will-change-transform"
+          style={{ transform: 'translate3d(-100px, -100px, 0) translate(-50%, -50%)' }}
         />
       )}
 
