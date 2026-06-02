@@ -26,7 +26,7 @@ const STAT_IMAGES: Record<string, string> = {
 export const WhyDubaiMall: React.FC = () => {
   const [galleryOpen, setGalleryOpen] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [mediaTab, setMediaTab] = useState<'youtube' | 'local' | 'gallery'>('youtube');
+  const [mediaTab, setMediaTab] = useState<'local' | 'gallery'>('local');
   const [isInlinePlaying, setIsInlinePlaying] = useState(false);
 
   const handleNextSlide = (e: React.MouseEvent) => {
@@ -418,17 +418,6 @@ export const WhyDubaiMall: React.FC = () => {
               {/* Luxury Skeuomorphic Tab Switcher */}
               <div className="flex gap-4 mb-6 p-1.5 rounded-xl border border-white/40 bg-[#D8E2F0] neu-inset">
                 <button
-                  onClick={() => setMediaTab('youtube')}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs uppercase tracking-wider font-bold transition-all duration-300 ${
-                    mediaTab === 'youtube'
-                      ? 'bg-surface text-gold border border-white/60 shadow-sm'
-                      : 'text-text-secondary hover:text-gold'
-                  }`}
-                >
-                  <FiTv size={14} />
-                  YouTube HD Stream
-                </button>
-                <button
                   onClick={() => setMediaTab('local')}
                   className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs uppercase tracking-wider font-bold transition-all duration-300 ${
                     mediaTab === 'local'
@@ -437,7 +426,7 @@ export const WhyDubaiMall: React.FC = () => {
                   }`}
                 >
                   <FiVideo size={14} />
-                  Local MP4 Loop
+                  Local HD Presentation
                 </button>
                 <button
                   onClick={() => setMediaTab('gallery')}
@@ -454,16 +443,6 @@ export const WhyDubaiMall: React.FC = () => {
 
               {/* Media Viewport Container */}
               <div className="relative w-full aspect-video rounded-xl overflow-hidden border border-white/70 neu-inset bg-[#D8E2F0]">
-                {mediaTab === 'youtube' && (
-                  <iframe
-                    className="w-full h-full border-none"
-                    src="https://www.youtube.com/embed/tL7sYJ3wW2o?autoplay=1&mute=0&rel=0&showinfo=0"
-                    title="Downtown Dubai - Fountain Show"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
-                )}
-
                 {mediaTab === 'local' && (
                   <video
                     className="w-full h-full object-cover"
@@ -504,7 +483,6 @@ export const WhyDubaiMall: React.FC = () => {
               </div>
 
               <p className="text-xs text-text-secondary text-center leading-relaxed mt-6 max-w-xl font-sans font-light">
-                {mediaTab === 'youtube' && "Streaming Emaar's official Downtown Dubai promotional showcase directly from Emaar Properties' global CDN."}
                 {mediaTab === 'local' && "Playing the high-resolution local MP4 loop directly from our local sales deck web asset directory."}
                 {mediaTab === 'gallery' && "Experience the grand architectural alignment of Dubai Mall and the Downtown Dubai catchment. Click or swipe the premium visual deck."}
               </p>

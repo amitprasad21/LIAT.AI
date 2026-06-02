@@ -24,7 +24,7 @@ const ATTRACTION_IMAGES: Record<string, string> = {
 export const EntertainmentShowcase: React.FC = () => {
   const [galleryOpen, setGalleryOpen] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [mediaTab, setMediaTab] = useState<'youtube' | 'local' | 'gallery'>('youtube');
+  const [mediaTab, setMediaTab] = useState<'local' | 'gallery'>('local');
   const [isInlinePlaying, setIsInlinePlaying] = useState(false);
 
   const handleNextSlide = (e: React.MouseEvent) => {
@@ -171,12 +171,13 @@ export const EntertainmentShowcase: React.FC = () => {
                 </div>
               ) : (
                 <div className="relative w-full h-full bg-black">
-                  <iframe
-                    className="w-full h-full border-none"
-                    src="https://www.youtube.com/embed/pKay2ZPY7bE?autoplay=1&mute=0&rel=0&showinfo=0"
-                    title="Dubai Aquarium Walkthrough"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
+                  <video
+                    className="w-full h-full object-cover"
+                    src="/videos/dubai_skyline.mp4"
+                    autoPlay
+                    controls
+                    loop
+                    playsInline
                   />
                   {/* Elegant close button in the corner to reset back to cover image */}
                   <button
@@ -246,17 +247,6 @@ export const EntertainmentShowcase: React.FC = () => {
               {/* Luxury Skeuomorphic Tab Switcher */}
               <div className="flex gap-4 mb-6 p-1.5 rounded-xl border border-white/40 bg-[#D8E2F0] neu-inset">
                 <button
-                  onClick={() => setMediaTab('youtube')}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs uppercase tracking-wider font-bold transition-all duration-300 ${
-                    mediaTab === 'youtube'
-                      ? 'bg-surface text-gold border border-white/60 shadow-sm'
-                      : 'text-text-secondary hover:text-gold'
-                  }`}
-                >
-                  <FiTv size={14} />
-                  YouTube HD Stream
-                </button>
-                <button
                   onClick={() => setMediaTab('local')}
                   className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs uppercase tracking-wider font-bold transition-all duration-300 ${
                     mediaTab === 'local'
@@ -265,7 +255,7 @@ export const EntertainmentShowcase: React.FC = () => {
                   }`}
                 >
                   <FiVideo size={14} />
-                  Local MP4 Loop
+                  Local HD Presentation
                 </button>
                 <button
                   onClick={() => setMediaTab('gallery')}
@@ -282,16 +272,6 @@ export const EntertainmentShowcase: React.FC = () => {
 
               {/* Media Viewport Container */}
               <div className="relative w-full aspect-video rounded-xl overflow-hidden border border-white/70 neu-inset bg-[#D8E2F0]">
-                {mediaTab === 'youtube' && (
-                  <iframe
-                    className="w-full h-full border-none"
-                    src="https://www.youtube.com/embed/pKay2ZPY7bE?autoplay=1&mute=0&rel=0&showinfo=0"
-                    title="Dubai Aquarium and Underwater Zoo"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
-                )}
-
                 {mediaTab === 'local' && (
                   <video
                     className="w-full h-full object-cover"
@@ -332,7 +312,6 @@ export const EntertainmentShowcase: React.FC = () => {
               </div>
 
               <p className="text-xs text-text-secondary text-center leading-relaxed mt-6 max-w-xl font-sans font-light">
-                {mediaTab === 'youtube' && "Streaming Emaar's official 4K Dubai Aquarium walkthrough showcasing the 270-degree viewing tunnel."}
                 {mediaTab === 'local' && "Playing the high-resolution local MP4 loop directly from our local sales deck web asset directory."}
                 {mediaTab === 'gallery' && "Experience the breathtaking visual beauty of the Dubai Aquarium and Underwater Zoo. Click or swipe the premium visual deck."}
               </p>
