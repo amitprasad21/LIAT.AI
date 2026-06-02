@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
-import { useScrollProgress } from '@/hooks/useScrollProgress';
 import {
   FiGrid,
   FiShoppingBag,
@@ -32,9 +31,11 @@ const SIDEBAR_LINKS = [
 ];
 
 export const LeftSidebar: React.FC = () => {
-  const progress = useScrollProgress();
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeHash, setActiveHash] = useState('');
+
+  const activeIdx = SIDEBAR_LINKS.findIndex((link) => link.hash === activeHash);
+  const progress = activeIdx !== -1 ? ((activeIdx + 1) / SIDEBAR_LINKS.length) * 100 : 10;
 
   // Sync hash state with sidebar links
   useEffect(() => {
