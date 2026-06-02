@@ -142,15 +142,3 @@ npm run lint
 npm run build
 ```
 
----
-
-## 📈 7. Evaluation Criteria Coverage
-
-| Criteria | Weight | Implementation Details in This Project |
-| :--- | :--- | :--- |
-| **Visual & UX Design** | 30% | Minimalist luxury theme, responsive Framer Motion page sweeps, clean light background card systems. |
-| **Technical Execution** | 25% | Statically pre-rendered routes, robust back-navigation hash routing, and 100% compilation safety. |
-| **AI Integration** | 15% | AI-generated design assets for retail showcases, dynamic pitch generator modeling. |
-| **Storytelling & Strategy** | 15% | Hook -> Demographics -> Segmented Core Modules -> Call to Action (LOI Registry). |
-| **Expandability** | 10% | Decoupled data layers and modular directory structure ready for deep sub-module expansion. |
-| **Attention to Detail** | 5% | Custom favicons, SEO tags, keyboard navigation overrides, and input focus validation. |
