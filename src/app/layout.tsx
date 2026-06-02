@@ -74,7 +74,7 @@ export default function RootLayout({
           <LeftSidebar />
 
           {/* Content Viewport Container shifted right to clear Pinned Sidebar */}
-          <div id="main-content" className="w-full min-h-screen lg:pl-28 pb-24 lg:pb-0 transition-all duration-300">
+          <div id="main-content" className="w-full min-h-screen lg:px-28 pb-24 lg:pb-0 transition-all duration-300">
             {children}
           </div>
         </DeckProvider>

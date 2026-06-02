@@ -182,7 +182,7 @@ export const EventsPlatform: React.FC = () => {
         {/* Custom Venue specification Cards Grid */}
         <div className="flex flex-wrap justify-center gap-8 mb-16">
           {eventVenues.map((venue, idx) => (
-            <ScrollReveal key={venue.id} delay={idx * 0.1} className="w-full md:w-[calc(50%-16px)] lg:w-[calc(33.333%-22px)] max-w-[380px]">
+            <ScrollReveal key={venue.id} delay={idx * 0.1} className="w-full md:w-[calc(50%-16px)] lg:w-[calc(33.333%-22px)] max-w-[380px] flex flex-col">
               <div className="h-full rounded-2xl bg-surface border border-slate-200/60 overflow-hidden flex flex-col justify-between group transition-all duration-500 hover:border-gold/30 hover:shadow-[0_15px_45px_rgba(30,58,138,0.04)] min-h-[460px] shadow-sm">
                 
                 {/* Top Half: Venue Image Preview */}

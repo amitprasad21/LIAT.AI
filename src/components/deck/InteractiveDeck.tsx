@@ -456,7 +456,7 @@ export const InteractiveDeck: React.FC = () => {
             className="w-full flex-1 flex flex-col relative"
           >
             {/* Render Slide Component */}
-            <div className="w-full flex-1 px-4 lg:px-24 pb-36 overflow-y-auto select-text">
+            <div className="w-full flex-1 px-4 lg:px-8 pb-36 overflow-y-auto select-text">
               {React.createElement(SLIDES[activeSlide].component)}
             </div>
 

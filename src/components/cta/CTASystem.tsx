@@ -345,7 +345,7 @@ ${formData.message || 'No additional message provided.'}
                 {/* AI-Generated Registry Hub Preview */}
                 <div className="rounded-xl overflow-hidden border border-slate-200/50 mb-6 bg-surface h-36 relative shadow-sm">
                   <img
-                    src="/images/leasing_showroom.png"
+                    src="/images/premium_showroom.png"
                     alt="Emaar Corporate Hub"
                     className="absolute inset-0 w-full h-full object-cover opacity-95 hover:scale-[1.02] transition-transform duration-500 ease-out pointer-events-none"
                   />

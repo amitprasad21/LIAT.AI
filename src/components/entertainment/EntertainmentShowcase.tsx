@@ -1,11 +1,9 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { ScrollReveal } from '@/components/animations/ScrollReveal';
+import { SectionHeader } from '@/components/shared/SectionHeader';
 import { entertainmentAttractions } from '@/data/entertainmentData';
-import { useGSAP } from '@gsap/react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { FaFish, FaSnowflake, FaGamepad, FaChild, FaFilm, FaTree } from 'react-icons/fa';
 import { FiX, FiChevronLeft, FiChevronRight, FiVideo, FiImage, FiTv } from 'react-icons/fi';
 
@@ -15,22 +13,15 @@ const AQUARIUM_GALLERY = [
 ];
 
 const ATTRACTION_IMAGES: Record<string, string> = {
-  aquarium: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=600&q=80',
-  'ice-rink': 'https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=600&q=80',
-  'vr-park': '/images/futuristic_vr_arena.png', // AI-Imagined VR Arena
-  kidzania: 'https://images.unsplash.com/photo-1596464716127-f2a82984de30?auto=format&fit=crop&w=600&q=80',
-  cinemas: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=600&q=80',
+  aquarium: '/images/aquarium_showcase.png',
+  'ice-rink': '/images/ice_rink_setup.png',
+  'vr-park': '/images/futuristic_vr_arena.png',
+  kidzania: '/images/kidzania_showcase.png',
+  cinemas: '/images/luxury_cinema_hall.png',
   rainforest: 'https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=600&q=80'
 };
 
-// Register GSAP plugins
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
-}
-
 export const EntertainmentShowcase: React.FC = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const leftColRef = useRef<HTMLDivElement>(null);
   const [galleryOpen, setGalleryOpen] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [mediaTab, setMediaTab] = useState<'youtube' | 'local' | 'gallery'>('youtube');
@@ -46,29 +37,8 @@ export const EntertainmentShowcase: React.FC = () => {
     setCurrentSlide((prev) => (prev - 1 + AQUARIUM_GALLERY.length) % AQUARIUM_GALLERY.length);
   };
 
-  useGSAP(() => {
-    if (typeof window === 'undefined') return;
-
-    // Only activate desktop scroll-pinning on viewports 1024px and up
-    if (window.innerWidth < 1024) return;
-
-    // Build the GSAP ScrollTrigger Pin animation
-    const pinTrigger = ScrollTrigger.create({
-      trigger: containerRef.current,
-      start: 'top top+=100',
-      end: 'bottom bottom-=200',
-      pin: leftColRef.current,
-      pinSpacing: false,
-      invalidateOnRefresh: true,
-    });
-
-    return () => {
-      pinTrigger.kill();
-    };
-  }, { scope: containerRef });
-
   const getAttractionIcon = (iconName: string) => {
-    const size = 38;
+    const size = 22;
     const colorClass = 'text-gold';
     switch (iconName) {
       case 'GiShark':
@@ -89,84 +59,66 @@ export const EntertainmentShowcase: React.FC = () => {
   return (
     <section
       id="entertainment"
-      ref={containerRef}
-      className="relative w-full py-32 px-6 md:px-12 bg-background border-t border-gold/10"
+      className="relative w-full py-24 bg-background border-t border-gold/10"
       aria-label="Entertainment Attractions"
     >
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 relative">
+      <div className="max-w-7xl mx-auto">
         
-        {/* Left Column: Pinned Section Header */}
-        <div ref={leftColRef} className="lg:col-span-4 lg:h-fit lg:sticky lg:top-32 self-start">
-          <span className="text-xs uppercase tracking-[0.3em] text-gold font-medium mb-3 block">
-            05 / EXPERIENTIAL ANCHORS
-          </span>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-display font-semibold tracking-wide text-ivory leading-tight mb-6">
-            Not a Mall.<br />
-            <span className="gold-text-gradient font-bold">An Experience.</span>
-          </h2>
-          <p className="text-lg font-accent font-light italic text-gold-light/90 mb-6 leading-relaxed">
-            &ldquo;Dubai Mall is a highly active lifestyle destination centered on world-record attractions.&rdquo;
-          </p>
-          <p className="text-sm text-text-secondary leading-relaxed font-sans font-light mb-8">
-            Each anchor attraction acts as a massive primary regional magnet, driving millions of high-attention global tourists and GCC families directly into our integrated commercial corridors.
-          </p>
-          
-          <div className="h-[1px] w-32 bg-gradient-to-r from-gold to-transparent" />
-        </div>
+        {/* Centered Section Header */}
+        <SectionHeader
+          badge="05 / EXPERIENTIAL ANCHORS"
+          title="Not a Mall. An Experience."
+          subtitle="Dubai Mall is a highly active lifestyle destination centered on world-record attractions."
+          description="Each anchor attraction acts as a massive primary regional magnet, driving millions of high-attention global tourists and GCC families directly into our integrated commercial corridors."
+          align="center"
+        />
 
-        {/* Right Column: Alternating Cards that Scroll Beneath the Pinned Header */}
-        <div className="lg:col-span-8 space-y-12">
+        {/* 2-Column Grid Layout for Attraction Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
           {entertainmentAttractions.map((attraction, idx) => {
             return (
-              <ScrollReveal key={attraction.id} delay={0.15}>
-                <div className="group rounded-2xl bg-surface border border-slate-200/60 p-6 md:p-8 hover:border-gold/30 hover:shadow-[0_15px_45px_rgba(30,58,138,0.04)] transition-all duration-500 flex flex-col md:flex-row gap-6 md:gap-8 items-stretch shadow-sm">
+              <ScrollReveal key={attraction.id} delay={idx * 0.1} className="w-full flex flex-col">
+                <div className="group rounded-2xl bg-surface border border-slate-200/60 p-6 hover:border-gold/30 hover:shadow-[0_15px_45px_rgba(30,58,138,0.04)] transition-all duration-500 flex flex-col justify-between h-full shadow-sm">
                   
-                  {/* Left Side: Spec Content (2/3 width) */}
-                  <div className="flex-grow flex flex-col justify-between">
-                    <div>
-                      {/* Card Header with Icon & Title */}
-                      <div className="flex items-center gap-4 mb-4 pb-4 border-b border-slate-100">
-                        <div className="p-3 bg-gold/5 rounded-full border border-gold/15 flex items-center justify-center text-gold">
-                          {getAttractionIcon(attraction.iconName)}
-                        </div>
-                        <div>
-                          <h4 className="text-lg md:text-xl font-display font-semibold text-ivory group-hover:text-gold transition-colors duration-300">
-                            {attraction.name}
-                          </h4>
-                          <span className="text-[9px] uppercase tracking-widest text-text-secondary">
-                            Anchor Attraction &bull; {idx + 1}
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Editorial Hook & Description */}
-                      <p className="text-xs font-accent italic text-gold/90 leading-relaxed mb-3">
-                        &ldquo;{attraction.hook}&rdquo;
-                      </p>
-                      <p className="text-xs text-text-secondary leading-relaxed font-sans font-light">
-                        {attraction.description}
-                      </p>
-                    </div>
-
-                    {/* High Impact Stat Box */}
-                    <div className="mt-6 p-3 rounded-lg bg-slate-50 border border-slate-200/50 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                      <span className="text-[9px] uppercase tracking-wider text-text-secondary font-medium">
-                        Key Performance Indicator
-                      </span>
-                      <span className="text-sm font-display font-semibold text-gold">
+                  {/* Top Area: Card Content */}
+                  <div>
+                    {/* Framed Image at the top with floating KPI badge */}
+                    <div className="h-52 w-full rounded-xl overflow-hidden relative shrink-0 border border-slate-200/40 shadow-sm mb-6">
+                      <img
+                        src={ATTRACTION_IMAGES[attraction.id] || ''}
+                        alt={attraction.name}
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-750 group-hover:scale-105 pointer-events-none"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent pointer-events-none" />
+                      
+                      {/* Floating Glassmorphic KPI Badge */}
+                      <span className="absolute top-4 right-4 inline-flex items-center gap-1.5 px-3 py-1 rounded bg-slate-900/65 backdrop-blur-md border border-white/10 text-[9.5px] uppercase tracking-widest text-white font-semibold shadow-sm">
                         {attraction.keyStat}
                       </span>
                     </div>
-                  </div>
 
-                  {/* Right Side: Framed Image (1/3 width, responsive size) */}
-                  <div className="w-full md:w-56 lg:w-64 h-48 md:h-auto rounded-xl overflow-hidden relative shrink-0 border border-slate-200/40 shadow-sm">
-                    <img
-                      src={ATTRACTION_IMAGES[attraction.id] || ''}
-                      alt={attraction.name}
-                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-750 group-hover:scale-105 pointer-events-none"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent pointer-events-none" />
+                    {/* Header: Icon & Title */}
+                    <div className="flex items-center gap-4 mb-4 pb-4 border-b border-slate-100">
+                      <div className="p-2.5 bg-gold/5 rounded-full border border-gold/15 flex items-center justify-center text-gold">
+                        {getAttractionIcon(attraction.iconName)}
+                      </div>
+                      <div>
+                        <h4 className="text-lg font-display font-semibold text-ivory group-hover:text-gold transition-colors duration-300">
+                          {attraction.name}
+                        </h4>
+                        <span className="text-[9px] uppercase tracking-widest text-text-secondary">
+                          Experiential Anchor &bull; {idx + 1}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Editorial Hook & Description */}
+                    <p className="text-xs font-accent italic text-gold/90 leading-relaxed mb-3">
+                      &ldquo;{attraction.hook}&rdquo;
+                    </p>
+                    <p className="text-xs text-text-secondary leading-relaxed font-sans font-light">
+                      {attraction.description}
+                    </p>
                   </div>
 
                 </div>
@@ -176,7 +128,7 @@ export const EntertainmentShowcase: React.FC = () => {
         </div>
 
         {/* Cinematic Experiential Video Spotlight */}
-        <ScrollReveal className="lg:col-span-12 mt-16 max-w-4xl mx-auto w-full">
+        <ScrollReveal className="max-w-4xl mx-auto w-full mt-16">
           <div 
             className="rounded-2xl p-6 md:p-8 bg-surface border border-white/60 neu-outset transition-all duration-500 hover:shadow-[0_15px_45px_rgba(43,89,195,0.08)] group"
           >
@@ -207,12 +159,12 @@ export const EntertainmentShowcase: React.FC = () => {
                       </svg>
                     </div>
                   </div>
-                  {/* Luxury Gradient Bottom Glass Overlay */}
-                  <div className="absolute bottom-0 inset-x-0 h-16 bg-gradient-to-t from-white/95 to-transparent flex items-center justify-between px-6 backdrop-blur-[1px]">
+                  {/* Luxury Floating Glass Overlay */}
+                  <div className="absolute bottom-4 left-4 right-4 h-14 rounded-xl glass-panel flex items-center justify-between px-6 border border-white/60 shadow-md">
                     <span className="text-[10px] uppercase tracking-widest text-text-primary font-medium">
                       Underwater Zoo Walking Tour Spotlight
                     </span>
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-gold/10 border border-gold/25 text-[8px] uppercase tracking-widest text-gold font-bold">
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-gold/10 border border-gold/25 text-[8.5px] uppercase tracking-widest text-gold font-bold">
                       Click to Play
                     </span>
                   </div>

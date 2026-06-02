@@ -7,9 +7,9 @@ import { venueShowcaseData } from '@/data/venueData';
 import { FiUsers, FiCompass } from 'react-icons/fi';
 
 const VENUE_PHOTOS: Record<string, string> = {
-  atrium: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=600&q=80',
+  atrium: '/images/grand_atrium_setup.png', // AI Grand Atrium Setup
   catwalk: '/images/runway_event_setup.png', // AI Runway Event Setup
-  rink: 'https://images.unsplash.com/photo-1518063319789-7217e6706b04?auto=format&fit=crop&w=600&q=80',
+  rink: '/images/ice_rink_setup.png', // AI Ice Rink Setup
   island: '/images/waterfront_venue_setup.png' // AI Waterfront Venue Setup
 };
 
