@@ -28,6 +28,13 @@
   --font-display: var(--font-playfair), serif;
   --font-sans: var(--font-inter), sans-serif;
   --font-accent: var(--font-cormorant), serif;
+
+  --animate-marquee: marquee 25s linear infinite;
+
+  @keyframes marquee {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(-50%); }
+  }
 }
 
 /* Custom Scrollbars to blend with light aesthetic */

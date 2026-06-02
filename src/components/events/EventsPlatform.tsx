@@ -159,7 +159,7 @@ export const EventsPlatform: React.FC = () => {
 
         {/* Infinite Past Events Marquee Ticker */}
         <div className="mb-24 relative overflow-hidden py-4 border-y border-gold/15 bg-surface/20">
-          <div className="flex w-[200%] gap-12 animate-[marquee_25s_linear_infinite]">
+          <div className="flex w-[200%] gap-12 animate-marquee">
             <div className="flex justify-around items-center w-1/2 gap-8 text-[10px] md:text-xs font-sans uppercase tracking-[0.3em] text-gold-light font-medium select-none">
               {pastEvents.map((evt, idx) => (
                 <div key={idx} className="flex items-center gap-3 shrink-0">
@@ -485,14 +485,6 @@ export const EventsPlatform: React.FC = () => {
           </div>
         </div>
       )}
-
-      {/* Styled Marquee Animation styles inside inline tag for convenience */}
-      <style jsx global>{`
-        @keyframes marquee {
-          0% { transform: translateX(0%); }
-          100% { transform: translateX(-50%); }
-        }
-      `}</style>
     </section>
   );
 };
